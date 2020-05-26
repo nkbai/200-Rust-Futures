@@ -1,58 +1,46 @@
-# Pin
+##   Pin
 
-> **Overview**
->
-> 1. Learn how to use `Pin` and why it's required when implementing your own `Future`
-> 2. Understand how to make self-referential types safe to use in Rust
-> 3. Learn how borrowing across `await` points is accomplished
-> 4. Get a set of practical rules to help you work with `Pin`
->
-> `Pin` was suggested in [RFC#2349][rfc2349]
+### 概述
+> 译者注: Pin是在使用Future时一个非常重要的概念,我的理解是: 通过使用Pin,让用户无法安全的获取到`&mut T`,进而无法进行上述例子中的swap. 如果你觉得你的和这个struct没有自引用的问题,你可以自己实现UnPin. 
 
-Let's jump strait to it. Pinning is one of those subjects which is hard to wrap
-your head around in the start, but once you unlock a mental model for it
-it gets significantly easier to reason about.
+1.  了解如何使用Pin以及当你自己实现`Future`的时候为什么需要Pin
+2. 理解如何让自引用类型被安全的使用
+3. 理解跨'await`借用是如何实现的
+4. 制定一套实用的规则来帮助你使用Pin
 
-## Definitions
+Pin是在[RFC#2349](https://github.com/rust-lang/rfcs/blob/master/text/2349-pin.md)中被提出的.
 
-Pin is only relevant for pointers. A reference to an object is a pointer.
+让我们直接了当的说吧,Pin是这一系列概念中很难一开始就搞明白的,但是一旦你理解了其心智模型,就会觉得非常容易理解.
 
-Pin consists of the `Pin` type and the `Unpin` marker. Pin's purpose in life is
-to govern the rules that need to apply for types which implement `!Unpin`.
 
-Yep, you're right, that's double negation right there. `!Unpin` means
-"not-un-pin".
+### 定义
 
-> _This naming scheme is one of Rusts safety features where it deliberately
-> tests if you're too tired to safely implement a type with this marker. If
-> you're starting to get confused, or even angry, by `!Unpin` it's a good sign
-> that it's time to lay down the work and start over tomorrow with a fresh mind._
+Pin只与指针有关,在Rust中引用也是指针.
 
-On a more serious note, I feel obliged to mention that there are valid reasons
-for the names that were chosen. Naming is not easy, and I considered renaming
-`Unpin` and `!Unpin` in this book to make them easier to reason about. 
+Pin有`Pin`类型和`Unpin`标记组成(UnPin是Rust中为数不多的几个auto trait). Pin存在的目的就是为了让那些实现了`!UnPin`的类型遵守特定的规则.
 
-However, an experienced member of the Rust community convinced me that that there
-is just too many nuances and edge-cases to consider which is easily overlooked when
-naively giving these markers different names, and I'm convinced that we'll
-just have to get used to them and use them as is.
 
-If you want to you can read a bit of the discussion from the
-[internals thread][internals_unpin].
+是的，你是对的，这里是双重否定`!Unpin` 的意思是“not-un-pin”。
 
-## Pinning and self-referential structs
 
-Let's start where we left off in the last chapter by making the problem we
-saw using a self-referential struct in our generator a lot simpler by making
-some self-referential structs that are easier to reason about than our
-state machines:
+> 这个命名方案是 Rusts 的安全特性之一，它故意测试您是否因为太累而无法安全地使用这个标记来实现类型。 如果你因为`UnPin`开始感到困惑，或者甚至生气，那么你就应该这样做！ 是时候放下工作，以全新的心态重新开始明天的生活了，这是一个好兆头。
 
-For now our example will look like this:
+更严肃地说，我认为有必要提到，选择这些名字是有正当理由的。 命名并不容易，我曾经考虑过在这本书中重命名 `Unpin` 和`!UnPin` ,使他们更容易理解。
 
-```rust, ignore
+然而，一位经验丰富的Rust社区成员让我相信，当简单地给这些标记起不同的名字时，有太多的细微差别和边缘情况需要考虑，而这些很容易被忽略，我相信我们将不得不习惯它们并按原样使用它们。
+
+如果你愿意，你可以从[内部讨论](https://internals.rust-lang.org/t/naming-pin-anchor-move/6864)中读到一些讨论。
+
+### Pinning和自引用结构
+让我们从上一章(生成器那一章)停止的地方开始，通过使用一些比状态机更容易推理的自引用结构，使我们在生成器中看到的使用自引用结构的问题变得简单得多:
+
+
+现在我们的例子是这样的:
+
+```rust
 use std::pin::Pin;
 
-#[derive(Debug)]
+  #[derive(Debug)]
 struct Test {
     a: String,
     b: *const String,
@@ -82,18 +70,13 @@ impl Test {
 }
 ```
 
-Let's walk through this example since we'll be using it the rest of this chapter.
+让我们来回顾一下这个例子，因为我们将在本章的其余部分使用它。
 
-We have a self-referential struct `Test`. `Test` needs an `init` method to be
-created which is strange but we'll need that to keep this example as short as
-possible.
+我们有一个自引用结构体`Test`。 Test需要创建一个init方法，这个方法很奇怪，但是为了尽可能简短，我们需要这个方法。
 
-`Test` provides two methods to get a reference to the value of the fields
-`a` and `b`. Since `b` is a reference to `a` we store it as a pointer since
-the borrowing rules of Rust doesn't allow us to define this lifetime.
+Test 提供了两种方法来获取字段 a 和 b 值的引用。 因为 b 是 a 的参考，所以我们把它存储为一个指针，因为 Rust 的借用规则不允许我们定义这个生命周期。
 
-Now, let's use this example to explain the problem we encounter in detail. As
-you see, this works as expected:
+现在，让我们用这个例子来详细解释我们遇到的问题:
 
 ```rust
 fn main() {
@@ -106,49 +89,15 @@ fn main() {
     println!("a: {}, b: {}", test2.a(), test2.b());
 
 }
-# use std::pin::Pin;
-# #[derive(Debug)]
-# struct Test {
-#     a: String,
-#     b: *const String,
-# }
-# 
-# impl Test {
-#     fn new(txt: &str) -> Self {
-#         let a = String::from(txt);
-#         Test {
-#             a,
-#             b: std::ptr::null(),
-#         }
-#     }
-# 
-#     // We need an `init` method to actually set our self-reference
-#     fn init(&mut self) {
-#         let self_ref: *const String = &self.a;
-#         self.b = self_ref;
-#     }
-#     
-#     fn a(&self) -> &str {
-#         &self.a
-#     } 
-#     
-#     fn b(&self) -> &String {
-#         unsafe {&*(self.b)}
-#     }
-# }
 ```
 
-In our main method we first instantiate two instances of `Test` and print out
-the value of the fields on `test1`. We get what we'd expect:
+在main函数中,我们首先实例化Test的两个实例,然后输出test1和test2各字段的值,结果如我们所料:
 
-```rust, ignore
+```
 a: test1, b: test1
 a: test2, b: test2
 ```
-
-Let's see what happens if we swap the data stored at the memory location
-which `test1` is pointing to with the data stored at the memory location
-`test2` is pointing to and vice a versa.
+让我们看看，如果我们将存储在 test1指向的内存位置的数据与存储在 test2指向的内存位置的数据进行交换，会发生什么情况，反之亦然。
 
 ```rust
 fn main() {
@@ -162,58 +111,24 @@ fn main() {
     println!("a: {}, b: {}", test2.a(), test2.b());
 
 }
-# use std::pin::Pin;
-# #[derive(Debug)]
-# struct Test {
-#     a: String,
-#     b: *const String,
-# }
-# 
-# impl Test {
-#     fn new(txt: &str) -> Self {
-#         let a = String::from(txt);
-#         Test {
-#             a,
-#             b: std::ptr::null(),
-#         }
-#     }
-# 
-#     fn init(&mut self) {
-#         let self_ref: *const String = &self.a;
-#         self.b = self_ref;
-#     }
-#     
-#     fn a(&self) -> &str {
-#         &self.a
-#     } 
-#     
-#     fn b(&self) -> &String {
-#         unsafe {&*(self.b)}
-#     }
-# }
 ```
 
-Naively, we could think that what we should get a debug print of `test1` two
-times like this
+我们可能会认为会打印两边test1,比如:
 
-```rust, ignore
+```rust
 a: test1, b: test1
 a: test1, b: test1
 ```
 
-But instead we get:
-
-```rust, ignore
+但是实际上我们得到的是:
+```
 a: test1, b: test1
 a: test1, b: test2
 ```
 
-The pointer to `test2.b` still points to the old location which is inside `test1`
-now. The struct is not self-referential anymore, it holds a pointer to a field
-in a different object. That means we can't rely on the lifetime of `test2.b` to
-be tied to the lifetime of `test2` anymore.
+指向 test2.b 的指针仍然指向test1内部的旧位置。 该结构不再是自引用的，它保存指向不同对象中的字段的指针。 这意味着我们不能再依赖test2.b的生存期与test2的生存期绑定在一起。
 
-If your still not convinced, this should at least convince you:
+如果你仍然不相信，这至少可以说服你:
 
 ```rust
 fn main() {
@@ -228,58 +143,25 @@ fn main() {
     println!("a: {}, b: {}", test2.a(), test2.b());
 
 }
-# use std::pin::Pin;
-# #[derive(Debug)]
-# struct Test {
-#     a: String,
-#     b: *const String,
-# }
-# 
-# impl Test {
-#     fn new(txt: &str) -> Self {
-#         let a = String::from(txt);
-#         Test {
-#             a,
-#             b: std::ptr::null(),
-#         }
-#     }
-# 
-#     fn init(&mut self) {
-#         let self_ref: *const String = &self.a;
-#         self.b = self_ref;
-#     }
-#     
-#     fn a(&self) -> &str {
-#         &self.a
-#     } 
-#     
-#     fn b(&self) -> &String {
-#         unsafe {&*(self.b)}
-#     }
-# }
 ```
+这是不应该发生的。 目前还没有严重的错误，但是您可以想象，使用这些代码很容易创建严重的错误。
 
-That shouldn't happen. There is no serious error yet, but as you can imagine
-it's easy to create serious bugs using this code.
+我创建了一个图表来帮助可视化正在发生的事情:
 
-I created a diagram to help visualize what's going on:
+![](swap_problem.jpg)
+图1: 交换前后
 
-**Fig 1: Before and after swap**
-![swap_problem](./assets/swap_problem.jpg)
+正如你看到的,这不是我们想要的结果. 这很容易导致段错误,也很容易导致其他意想不到的未知行为以及失败.
 
-As you can see this results in unwanted behavior. It's easy to get this to 
-segfault, show UB and fail in other spectacular ways as well.
+### 固定在栈上
 
-## Pinning to the stack
+现在，我们可以通过使用`Pin`来解决这个问题。 让我们来看看我们的例子是什么样的:
 
-Now, we can solve this problem by using `Pin` instead. Let's take a look at what
-our example would look like then:
-
-```rust, ignore
+```rust
 use std::pin::Pin;
 use std::marker::PhantomPinned;
 
-#[derive(Debug)]
+ #[derive(Debug)]
 struct Test {
     a: String,
     b: *const String,
@@ -313,14 +195,11 @@ impl Test {
 }
 ```
 
-Now, what we've done here is pinning a stack address. That will always be
-`unsafe` if our type implements `!Unpin`.
+现在，我们在这里所做的就是固定到一个栈地址。如果我们的类型实现了`!UnPin`，那么它将总是`unsafe`。
 
-We use the same tricks here, including requiring an `init`. If we want to fix that
-and let users avoid `unsafe` we need to pin our data on the heap instead which
-we'll show in a second.
+我们在这里使用相同的技巧，包括需要 init。 如果我们想要解决这个问题并让用户避免`unsafe`，我们需要将数据钉在堆上，我们马上就会展示这一点。
 
-Let's see what happens if we run our example now:
+让我们看看如果我们现在运行我们的例子会发生什么:
 
 ```rust
 pub fn main() {
@@ -337,47 +216,10 @@ pub fn main() {
     println!("a: {}, b: {}", Test::a(test1.as_ref()), Test::b(test1.as_ref()));
     println!("a: {}, b: {}", Test::a(test2.as_ref()), Test::b(test2.as_ref()));
 }
-# use std::pin::Pin;
-# use std::marker::PhantomPinned;
-# 
-# #[derive(Debug)]
-# struct Test {
-#     a: String,
-#     b: *const String,
-#     _marker: PhantomPinned,
-# }
-# 
-# 
-# impl Test {
-#     fn new(txt: &str) -> Self {
-#         let a = String::from(txt);
-#         Test {
-#             a,
-#             b: std::ptr::null(),
-#             // This makes our type `!Unpin`
-#             _marker: PhantomPinned,
-#         }
-#     }
-#     fn init<'a>(self: Pin<&'a mut Self>) {
-#         let self_ptr: *const String = &self.a;
-#         let this = unsafe { self.get_unchecked_mut() };
-#         this.b = self_ptr;
-#     }
-# 
-#     fn a<'a>(self: Pin<&'a Self>) -> &'a str {
-#         &self.get_ref().a
-#     }
-# 
-#     fn b<'a>(self: Pin<&'a Self>) -> &'a String {
-#         unsafe { &*(self.b) }
-#     }
-# }
 ```
 
-Now, if we try to pull the same trick which got us in to trouble the last time
-you'll get a compilation error.
-
-```rust, compile_fail
+现在，如果我们尝试使用上次使我们陷入麻烦的问题，您将得到一个编译错误。
+```rust
 pub fn main() {
     let mut test1 = Test::new("test1");
     let mut test1 = unsafe { Pin::new_unchecked(&mut test1) };
@@ -391,115 +233,35 @@ pub fn main() {
     std::mem::swap(test1.as_mut(), test2.as_mut());
     println!("a: {}, b: {}", Test::a(test2.as_ref()), Test::b(test2.as_ref()));
 }
-# use std::pin::Pin;
-# use std::marker::PhantomPinned;
-# 
-# #[derive(Debug)]
-# struct Test {
-#     a: String,
-#     b: *const String,
-#     _marker: PhantomPinned,
-# }
-# 
-# 
-# impl Test {
-#     fn new(txt: &str) -> Self {
-#         let a = String::from(txt);
-#         Test {
-#             a,
-#             b: std::ptr::null(),
-#             // This makes our type `!Unpin`
-#             _marker: PhantomPinned,
-#         }
-#     }
-#     fn init<'a>(self: Pin<&'a mut Self>) {
-#         let self_ptr: *const String = &self.a;
-#         let this = unsafe { self.get_unchecked_mut() };
-#         this.b = self_ptr;
-#     }
-# 
-#     fn a<'a>(self: Pin<&'a Self>) -> &'a str {
-#         &self.get_ref().a
-#     }
-# 
-#     fn b<'a>(self: Pin<&'a Self>) -> &'a String {
-#         unsafe { &*(self.b) }
-#     }
-# }
 ```
 
-As you see from the error you get by running the code the type system prevents
-us from swapping the pinned pointers.
+正如您从运行代码所得到的错误中看到的那样，类型系统阻止我们交换固定指针。
 
-> It's important to note that stack pinning will always depend on the current
-> stack frame we're in, so we can't create a self referential object in one
-> stack frame and return it since any pointers we take to "self" is invalidated.
-> 
-> It also puts a lot of responsibility in your hands if you pin a value to the
-> stack. A mistake that is easy to make is, forgetting to shadow the original variable 
-> since you could drop the pinned pointer and access the old value
-> after it's initialized like this:
->
-> ```rust
-> fn main() {
->    let mut test1 = Test::new("test1");
->    let mut test1_pin = unsafe { Pin::new_unchecked(&mut test1) };
->    Test::init(test1_pin.as_mut());
->    drop(test1_pin);
->    
->    let mut test2 = Test::new("test2");
->    mem::swap(&mut test1, &mut test2);
->    println!("Not self referential anymore: {:?}", test1.b);
-> }
-> # use std::pin::Pin;
-> # use std::marker::PhantomPinned;
-> # use std::mem;
-> # 
-> # #[derive(Debug)]
-> # struct Test {
-> #     a: String,
-> #     b: *const String,
-> #     _marker: PhantomPinned,
-> # }
-> # 
-> # 
-> # impl Test {
-> #     fn new(txt: &str) -> Self {
-> #         let a = String::from(txt);
-> #         Test {
-> #             a,
-> #             b: std::ptr::null(),
-> #             // This makes our type `!Unpin`
-> #             _marker: PhantomPinned,
-> #         }
-> #     }
-> #     fn init<'a>(self: Pin<&'a mut Self>) {
-> #         let self_ptr: *const String = &self.a;
-> #         let this = unsafe { self.get_unchecked_mut() };
-> #         this.b = self_ptr;
-> #     }
-> # 
-> #     fn a<'a>(self: Pin<&'a Self>) -> &'a str {
-> #         &self.get_ref().a
-> #     }
-> # 
-> #     fn b<'a>(self: Pin<&'a Self>) -> &'a String {
-> #         unsafe { &*(self.b) }
-> #     }
-> # }
-> ```
+> 需要注意的是，栈pinning总是依赖于我们所在的当前栈帧，因此我们不能在一个栈帧中创建一个自引用对象并返回它，因为任何指向“self”的指针都是无效的。
+> 如果你把一个值固定在一个栈上，这也会让你承担很多责任。 一个很容易犯的错误是，忘记对原始变量进行阴影处理，因为这样可以在初始化后drop固定的指针并访问原来的值:
+```rust
+fn main() {
+   let mut test1 = Test::new("test1");
+   let mut test1_pin = unsafe { Pin::new_unchecked(&mut test1) };
+   Test::init(test1_pin.as_mut());
+   drop(test1_pin);
+   
+   let mut test2 = Test::new("test2");
+   mem::swap(&mut test1, &mut test2);
+   println!("Not self referential anymore: {:?}", test1.b);
+}
+```
 
-## Pinning to the heap
+### 固定在堆上
 
-For completeness let's remove some unsafe and the need for an `init` method
-at the cost of a heap allocation. Pinning to the heap is safe so the user
-doesn't need to implement any unsafe code:
+
+为了完整性，让我们删除一些不安全的内容，通过以堆分配为代价来消除`init`方法。 固定到堆是安全的，这样用户不需要实现任何不安全的代码:
 
 ```rust
 use std::pin::Pin;
 use std::marker::PhantomPinned;
 
-#[derive(Debug)]
+ #[derive(Debug)]
 struct Test {
     a: String,
     b: *const String,
@@ -539,86 +301,46 @@ pub fn main() {
 }
 ```
 
-The fact that it's safe to pin a heap allocated value even if it is `!Unpin`
-makes sense. Once the data is allocated on the heap it will have a stable address.
+事实上就算是`!Unpin`有意义,固定一个堆分配的值也是安全的。 一旦在堆上分配了数据，它就会有一个稳定的地址。
 
-There is no need for us as users of the API to take special care and ensure
-that the self-referential pointer stays valid.
+作为 API 的用户，我们不需要特别注意并确保自引用指针保持有效。
 
-There are ways to safely give some guarantees on stack pinning as well, but right
-now you need to use a crate like [pin_project][pin_project] to do that.
+也有一些方法能够对固定栈上提供一些安全保证，但是现在我们使用[pin_project](https://docs.rs/pin-project/)这个包来实现这一点。
 
-## Practical rules for Pinning
+### Pinning的一些实用规则
 
-1. If `T: Unpin` (which is the default), then `Pin<'a, T>` is entirely
-equivalent to `&'a mut T`. in other words: `Unpin` means it's OK for this type
-to be moved even when pinned, so `Pin` will have no effect on such a type.
+1. 针对`T:UnPin`(这是默认值),`Pin<'a,T>`完全定价与`&'a mut T`. 换句话说: `UnPin`意味着这个类型即使在固定时也可以移动，所以Pin对这个类型没有影响。
+2. 针对`T:!UnPin`,从`Pin< T>`获取到`&mut T`,则必须使用unsafe. 换句话说,`!Unpin`能够阻止API的使用者移动T,除非他写出unsafe的代码.
+3. Pinning对于内存分配没有什么特别的作用，比如将其放入某个“只读”内存或任何奇特的内存中。 它只使用类型系统来防止对该值进行某些操作。
+4. 大多数标准库类型实现 Unpin。 这同样适用于你在 Rust 中遇到的大多数“正常”类型。 `Future`和`Generators`是两个例外。
+5. Pin的主要用途就是自引用类型,Rust语言的所有这些调整就是为了允许这个. 这个API中仍然有一些问题需要探讨.
+6. `!UnPin`这些类型的实现很有可能是不安全的. 在这种类型被钉住后移动它可能会导致程序崩溃。 在撰写本书时，创建和读取自引用结构的字段仍然需要不安全的方法(唯一的方法是创建一个包含指向自身的原始指针的结构)。
+7. 当使用nightly版本时,你可以在一个使用特性标记在一个类型上添加`!UnPin`. 当使用stable版本时,可以将std: : marker: : PhantomPinned 添加到类型上。
+8. 你既可以固定一个栈上的对象也可以固定一个堆上的对象.
+9. 将一个`!UnPin`的指向栈上的指针固定需要unsafe.
+10. 将一个`!UnPin`的指向堆上的指针固定,不需要unsafe,可以直接使用`Box::Pin`.
 
-2. Getting a `&mut T` to a pinned T requires unsafe if `T: !Unpin`. In
-other words: requiring a pinned pointer to a type which is `!Unpin` prevents
-the _user_ of that API from moving that value unless it choses to write `unsafe`
-code.
+> 不安全的代码并不意味着它真的“unsafe” ，它只是减轻了通常从编译器得到的保证。 一个不安全的实现可能是完全安全的，但是您没有编译器保证的安全网。
 
-3. Pinning does nothing special with memory allocation like putting it into some
-"read only" memory or anything fancy. It only uses the type system to prevent
-certain operations on this value.
+### 映射/结构体的固定
 
-1. Most standard library types implement `Unpin`. The same goes for most
-"normal" types you encounter in Rust. `Futures` and `Generators` are two
-exceptions.
+简而言之，投影是一个编程语言术语。 Mystruct.field1是一个投影。 结构体的固定是在每一个字段上使用Pin。 这里有一些注意事项，您通常不会看到，因此我参考相关文档。
 
-5. The main use case for `Pin` is to allow self referential types, the whole
-justification for stabilizing them was to allow that. There are still corner
-cases in the API which are being explored.
+### Pin和Drop
 
-6. The implementation behind objects that are `!Unpin` is most likely unsafe.
-Moving such a type after it has been pinned can cause the universe to crash. As of the time of writing
-this book, creating and reading fields of a self referential struct still requires `unsafe`
-(the only way to do it is to create a struct containing raw pointers to itself).
+Pin保证从值被固定到被删除的那一刻起一直存在。 而在Drop实现中，您需要一个可变的 self 引用，这意味着在针对固定类型实现 Drop 时必须格外小心。
 
-7. You can add a `!Unpin` bound on a type on nightly with a feature flag, or
-by adding `std::marker::PhantomPinned` to your type on stable.
+### 把它们放在一起
 
-8. You can either pin a value to memory on the stack or on the heap.
+当我们实现自己的`Futures`的时候,这正是我们要做的，我们很快就完成了。
 
-9. Pinning a `!Unpin` pointer to the stack requires `unsafe`
+### 奖励部分
 
-10. Pinning a `!Unpin` pointer to the heap does not require `unsafe`. There is a shortcut for doing this using `Box::pin`.
+**修复我们实现的自引用生成器以及学习更多的关于Pin的知识.**
 
-> Unsafe code does not mean it's literally "unsafe", it only relieves the 
-> guarantees you normally get from the compiler. An `unsafe` implementation can 
-> be perfectly safe to do, but you have no safety net.
-
-
-### Projection/structural pinning
-
-In short, projection is a programming language term. `mystruct.field1` is a
-projection. Structural pinning is using `Pin` on fields. This has several
-caveats and is not something you'll normally see so I refer to the documentation
-for that.
-
-### Pin and Drop
-
-The `Pin` guarantee exists from the moment the value is pinned until it's dropped.
-In the `Drop` implementation you take a mutable reference to `self`, which means
-extra care must be taken when implementing `Drop` for pinned types.
-
-## Putting it all together
-
-This is exactly what we'll do when we implement our own `Futures` stay tuned, 
-we're soon finished.
-
-[rfc2349]: https://github.com/rust-lang/rfcs/blob/master/text/2349-pin.md
-[pin_project]: https://docs.rs/pin-project/
-[internals_unpin]: https://internals.rust-lang.org/t/naming-pin-anchor-move/6864/12
-
-## Bonus section: Fixing our self-referential generator and learning more about Pin
-
-But now, let's prevent this problem using `Pin`. I've commented along the way to
-make it easier to spot and understand the changes we need to make.
-
+但是现在，让我们使用 Pin 来防止这个问题。 我一直在评论，以便更容易地发现和理解我们需要做出的改变。
 ```rust
-#![feature(optin_builtin_traits, negative_impls)] // needed to implement `!Unpin`
+ #![feature(optin_builtin_traits, negative_impls)] // needed to implement `!Unpin`
 use std::pin::Pin;
 
 pub fn main() {
@@ -688,7 +410,7 @@ impl GeneratorA {
 // This tells us that the underlying pointer is not safe to move after pinning.
 // In this case, only we as implementors "feel" this, however, if someone is
 // relying on our Pinned pointer this will prevent them from moving it. You need
-// to enable the feature flag `#![feature(optin_builtin_traits)]` and use the
+// to enable the feature flag ` #![feature(optin_builtin_traits)]` and use the
 // nightly compiler to implement `!Unpin`. Normally, you would use
 // `std::marker::PhantomPinned` to indicate that the struct is `!Unpin`.
 impl !Unpin for GeneratorA { }
@@ -729,13 +451,8 @@ impl Generator for GeneratorA {
 }
 ```
 
-Now, as you see, the consumer of this API must either:
+现在，正如你所看到的，这个 API 的使用者必须:
+1. 将值装箱，从而在堆上分配它
+2. 使用`unafe`然后把值固定到栈上。 用户知道如果他们事后移动了这个值，那么他们在就违反了当他们使用unsafe时候做出的承诺,也就是一直持有.
 
-1. Box the value and thereby allocating it on the heap
-2. Use `unsafe` and pin the value to the stack. The user knows that if they move
-the value afterwards it will violate the guarantee they promise to uphold when
-they did their unsafe implementation.
-
-Hopefully, after this you'll have an idea of what happens when you use the
-`yield` or `await` keywords inside an async function, and why we need `Pin` if
-we want to be able to safely borrow across `yield/await` points.
+希望在这之后，你会知道当你在一个异步函数中使用`yield`或者`await`关键词时会发生什么，以及如果我们想要安全地跨yield/await借用时。,为什么我们需要`Pin`

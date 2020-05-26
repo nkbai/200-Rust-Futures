@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Implementing Futures - Futures Explained in 200 Lines of Rust</title>
+        <title>实现Futures--主要例子 - Futures Explained in 200 Lines of Rust</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -80,8 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> Background information</a></li><li class="expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Futures in Rust</a></li><li class="expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> Waker and Context</a></li><li class="expanded "><a href="3_generators_async_await.html"><strong aria-hidden="true">4.</strong> Generators and async/await</a></li><li class="expanded "><a href="4_pin.html"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="expanded "><a href="6_future_example.html" class="active"><strong aria-hidden="true">6.</strong> Implementing Futures</a></li><li class="expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> Finished example (editable)</a></li><li class="expanded affix "><a href="conclusion.html">Conclusion and exercises</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">引言</a></li><li class="chapter-item expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> 背景资料</a></li><li class="chapter-item expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Rust中的Futures</a></li><li class="chapter-item expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> 唤醒器和上下文</a></li><li class="chapter-item expanded "><a href="3_generators_async_await.html"><strong aria-hidden="true">4.</strong> 生成器和async/await</a></li><li class="chapter-item expanded "><a href="4_pin.html"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="chapter-item expanded "><a href="6_future_example.html" class="active"><strong aria-hidden="true">6.</strong> 实现Futures--主要例子</a></li><li class="chapter-item expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> 完整的例子</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">结论和练习</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -90,41 +90,40 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
+                    <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -152,43 +151,40 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#implementing-futures---main-example" id="implementing-futures---main-example">Implementing Futures - main example</a></h1>
-<p>We'll create our own <code>Futures</code> together with a fake reactor and a simple
-executor which allows you to edit, run an play around with the code right here
-in your browser.</p>
-<p>I'll walk you through the example, but if you want to check it out closer, you
-can always <a href="https://github.com/cfsamson/examples-futures">clone the repository</a> and play around with the code
-yourself or just copy it from the next chapter.</p>
-<p>There are several branches explained in the readme, but two are
-relevant for this chapter. The <code>main</code> branch is the example we go through here,
-and the <code>basic_example_commented</code> branch is this example with extensive
-comments.</p>
+                        <h2><a class="header" href="#实现futures--主要例子" id="实现futures--主要例子">实现Futures--主要例子</a></h2>
+<p>我们将用一个伪reactor和一个简单的执行器创建我们自己的<code>Futures</code>，它允许你在浏览器中编辑和运行代码</p>
+<p>我将向您介绍这个示例，但是如果您想更深入的研究它，您可以<a href="https://github.com/cfsamson/examples-futures">克隆存储库</a>并自己处理代码，或者直接从下一章复制代码。</p>
+<p>readme文件中解释了几个分支，其中有两个分支与本章相关。 主分支是我们在这里经过的例子，<code>basic_example_commented</code>分支是这个具有大量注释的例子</p>
 <blockquote>
-<p>If you want to follow along as we go through, initialize a new cargo project
-by creating a new folder and run <code>cargo init</code> inside it. Everything we write
-here will be in <code>main.rs</code></p>
+<p>如果您希望跟随我们的步骤，可以通过创建一个新的文件夹初始化一个新的 cargo 项目，并在其中运行 cargo init。所有的一切都在main.rs文件中.</p>
 </blockquote>
-<h2><a class="header" href="#implementing-our-own-futures" id="implementing-our-own-futures">Implementing our own Futures</a></h2>
-<p>Let's start off by getting all our imports right away so you can follow along</p>
-<pre><code class="language-rust noplaypen ignore">use std::{
+<h3><a class="header" href="#实现我们自己的futures" id="实现我们自己的futures">实现我们自己的Futures</a></h3>
+<p>让我们先从引入依赖开始:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use std::{
     future::Future, pin::Pin, sync::{mpsc::{channel, Sender}, Arc, Mutex},
     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
     thread::{self, JoinHandle}, time::{Duration, Instant}
 };
-</code></pre>
-<h2><a class="header" href="#the-executor" id="the-executor">The Executor</a></h2>
-<p>The executors responsibility is to take one or more futures and run them to completion.</p>
-<p>The first thing an <code>executor</code> does when it gets a <code>Future</code> is polling it.</p>
-<p><strong>When polled one of three things can happen:</strong></p>
-<ul>
-<li>The future returns <code>Ready</code> and we schedule whatever chained operations to run</li>
-<li>The future hasn't been polled before so we pass it a <code>Waker</code> and suspend it</li>
-<li>The futures has been polled before but is not ready and returns <code>Pending</code></li>
-</ul>
-<p>Rust provides a way for the Reactor and Executor to communicate through the <code>Waker</code>. The reactor stores this <code>Waker</code> and calls <code>Waker::wake()</code> on it once
-a <code>Future</code> has resolved and should be polled again.</p>
-<p><strong>Our Executor will look like this:</strong></p>
-<pre><code class="language-rust noplaypen ignore">// Our executor takes any object which implements the `Future` trait
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#执行器" id="执行器">执行器</a></h3>
+<p>执行器的责任是获取一个或多个<code>Future</code>然后运行他们到完成。</p>
+<p>执行器拿到<code>Future</code>后的第一件事就是轮询它.</p>
+<p>轮询后可以发现以下三种情况:</p>
+<ol>
+<li><code>Future</code>返回Ready,然后就可以调度其他任何后续操作.</li>
+<li>这个<code>Future</code>从未被轮询过,所以传入一个<code>Waker</code>,然后将它挂起</li>
+<li>这个<code>Future</code>已经被轮询过,但是返回<code>Pending</code></li>
+</ol>
+<p>Rust通过<code>Waker</code>为Reactor和执行器提供了通信方式. reactor存储这个<code>Waker</code>,然后在<code>Future</code>等待的事件完成的时候调用<code>Waker: : wake ()</code>,这样<code>Future</code>就会被再次轮询.</p>
+<p>我们的执行器会是这个样子:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// Our executor takes any object which implements the `Future` trait
 fn block_on&lt;F: Future&gt;(mut future: F) -&gt; F::Output {
 
     // the first thing we do is to construct a `Waker` which we'll pass on to
@@ -223,32 +219,22 @@ fn block_on&lt;F: Future&gt;(mut future: F) -&gt; F::Output {
     };
     val
 }
-</code></pre>
-<p>In all the examples you'll see in this chapter I've chosen to comment the code
-extensively. I find it easier to follow along that way so I'll not repeat myself
-here and focus only on some important aspects that might need further explanation.</p>
-<p>Now that you've read so much about <code>Generators</code> and <code>Pin</code> already this should
-be rather easy to understand. <code>Future</code> is a state machine, every <code>await</code> point
-is a <code>yield</code> point. We could borrow data across <code>await</code> points and we meet the
-exact same challenges as we do when borrowing across <code>yield</code> points.</p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>在本章的所有例子中，我都选择了对代码进行广泛的注释。 我发现沿着这条路走会更容易一些，所以我不会在这里重复自己的话，只关注一些可能需要进一步解释的重要方面。</p>
+<p>现在你已经阅读了这么多关于生成器和 Pin 的内容，这应该很容易理解。 <code>Future</code>是一个状态机，每一个<code>await</code>点也是一个<code>yield</code>点。 我们可以跨越<code>await</code>借用，我们遇到的问题与跨<code>yield</code>借用时完全一样。</p>
 <blockquote>
-<p><code>Context</code> is just a wrapper around the <code>Waker</code>. At the time of writing this
-book it's nothing more. In the future it might be possible that the <code>Context</code>
-object will do more than just wrapping a <code>Future</code> so having this extra 
-abstraction gives some flexibility.</p>
+<p><code>Context</code>只是 <code>Waker</code> 的包装器, 至少在我写这本书的时候，它仅仅是这样。 在未来，<code>Context</code>对象可能不仅仅是包装一个<code>Waker</code>(译者注,原文是Future,应该有误)，因此这种额外的抽象可以提供一些灵活性。</p>
 </blockquote>
-<p>As explained in the <a href="./3_generators_pin.html">chapter about generators</a>, we use
-<code>Pin</code> and the guarantees that give us to allow <code>Futures</code> to have self
-references.</p>
-<h2><a class="header" href="#the-future-implementation" id="the-future-implementation">The <code>Future</code> implementation</a></h2>
-<p>Futures has a well defined interface, which means they can be used across the
-entire ecosystem. </p>
-<p>We can chain these <code>Futures</code> so that once a <strong>leaf-future</strong> is
-ready we'll perform a set of operations until either the task is finished or we
-reach yet another <strong>leaf-future</strong> which we'll wait for and yield control to the
-scheduler.</p>
-<p><strong>Our Future implementation looks like this:</strong></p>
-<pre><code class="language-rust noplaypen ignore">// This is the definition of our `Waker`. We use a regular thread-handle here.
+<p>正如在关于生成器的章节中解释的那样，我们使用Pin来保证允许<code>Future</code>有自引用。</p>
+<h3><a class="header" href="#实现future" id="实现future">实现Future</a></h3>
+<p><code>Future</code>有一个定义良好的接口，这意味着他们可以用于整个生态系统。</p>
+<p>我们可以将这些<code>Future</code>连接起来，这样一旦<code>leaf-future</code>准备好了，我们就可以执行一系列操作，直到任务完成或者我们到达另一个<code>leaf-future</code>，我们将等待并将控制权交给调度程序。</p>
+<p>我们<code>Future</code>的实现是这样的:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// This is the definition of our `Waker`. We use a regular thread-handle here.
 // It works but it's not a good solution. It's easy to fix though, I'll explain
 // after this code snippet.
 #[derive(Clone)]
@@ -264,9 +250,8 @@ struct MyWaker {
 #[derive(Clone)]
 pub struct Task {
     id: usize,
-    reactor: Arc&lt;Mutex&lt;Reactor&gt;&gt;,
+    reactor: Arc&lt;Mutex&lt;Box&lt;Reactor&gt;&gt;&gt;,
     data: u64,
-    is_registered: bool,
 }
 
 // These are function definitions we'll use for our waker. Remember the
@@ -298,7 +283,7 @@ const VTABLE: RawWakerVTable = unsafe {
     )
 };
 
-// Instead of implementing this on the `MyWaker` oject in `impl Mywaker...` we
+// Instead of implementing this on the `MyWaker` object in `impl Mywaker...` we
 // just use this pattern instead since it saves us some lines of code.
 fn waker_into_waker(s: *const MyWaker) -&gt; Waker {
     let raw_waker = RawWaker::new(s as *const (), &amp;VTABLE);
@@ -306,123 +291,110 @@ fn waker_into_waker(s: *const MyWaker) -&gt; Waker {
 }
 
 impl Task {
-    fn new(reactor: Arc&lt;Mutex&lt;Reactor&gt;&gt;, data: u64, id: usize) -&gt; Self {
-        Task {
-            id,
-            reactor,
-            data,
-            is_registered: false,
-        }
+    fn new(reactor: Arc&lt;Mutex&lt;Box&lt;Reactor&gt;&gt;&gt;, data: u64, id: usize) -&gt; Self {
+        Task { id, reactor, data }
     }
 }
 
 // This is our `Future` implementation
 impl Future for Task {
-
-    // The output for our kind of `leaf future` is just an `usize`. For other
-    // futures this could be something more interesting like a byte array.
     type Output = usize;
-    fn poll(mut self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt; {
+
+    // Poll is the what drives the state machine forward and it's the only
+    // method we'll need to call to drive futures to completion.
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt; {
+
+        // We need to get access the reactor in our `poll` method so we acquire
+        // a lock on that.
         let mut r = self.reactor.lock().unwrap();
 
-        // we check with the `Reactor` if this future is in its &quot;readylist&quot;
-        // i.e. if it's `Ready`
+        // First we check if the task is marked as ready
         if r.is_ready(self.id) {
 
-            // if it is, we return the data. In this case it's just the ID of
-            // the task since this is just a very simple example.
+            // If it's ready we set its state to `Finished`
+            *r.tasks.get_mut(&amp;self.id).unwrap() = TaskState::Finished;
             Poll::Ready(self.id)
-        } else if self.is_registered {
+        
+        // If it isn't finished we check the map we have stored in our Reactor
+        // over id's we have registered and see if it's there
+        } else if r.tasks.contains_key(&amp;self.id) {
 
-            // If the future is registered alredy, we just return `Pending`
+            // This is important. The docs says that on multiple calls to poll,
+            // only the Waker from the Context passed to the most recent call
+            // should be scheduled to receive a wakeup. That's why we insert
+            // this waker into the map (which will return the old one which will
+            // get dropped) before we return `Pending`.
+            r.tasks.insert(self.id, TaskState::NotReady(cx.waker().clone()));
             Poll::Pending
         } else {
 
-            // If we get here, it must be the first time this `Future` is polled
-            // so we register a task with our `reactor`
+            // If it's not ready, and not in the map it's a new task so we
+            // register that with the Reactor and return `Pending`
             r.register(self.data, cx.waker().clone(), self.id);
-
-            // oh, we have to drop the lock on our `Mutex` here because we can't
-            // have a shared and exclusive borrow at the same time
-            drop(r);
-            self.is_registered = true;
             Poll::Pending
         }
+
+        // Note that we're holding a lock on the `Mutex` which protects the
+        // Reactor all the way until the end of this scope. This means that
+        // even if our task were to complete immidiately, it will not be
+        // able to call `wake` while we're in our `Poll` method.
+
+        // Since we can make this guarantee, it's now the Executors job to
+        // handle this possible race condition where `Wake` is called after
+        // `poll` but before our thread goes to sleep.
     }
 }
-</code></pre>
-<p>This is mostly pretty straight forward. The confusing part is the strange way
-we need to construct the <code>Waker</code>, but since we've already created our own
-<em>trait objects</em> from raw parts, this looks pretty familiar. Actually, it's
-even a bit easier.</p>
-<p>We use an <code>Arc</code> here to pass out a ref-counted borrow of our <code>MyWaker</code>. This
-is pretty normal, and makes this easy and safe to work with. Cloning a <code>Waker</code>
-is just increasing the refcount in this case.</p>
-<p>Dropping a <code>Waker</code> is as easy as decreasing the refcount. Now, in special
-cases we could choose to not use an <code>Arc</code>. So this low-level method is there
-to allow such cases. </p>
-<p>Indeed, if we only used <code>Arc</code> there is no reason for us to go through all the 
-trouble of creating our own <code>vtable</code> and a <code>RawWaker</code>. We could just implement
-a normal trait.</p>
-<p>Fortunately, in the future this will probably be possible in the standard
-library as well. For now, <a href="https://rust-lang-nursery.github.io/futures-api-docs/0.3.0-alpha.13/futures/task/trait.ArcWake.html">this trait lives in the nursery</a>, but my
-guess is that this will be a part of the standard library after som maturing.</p>
-<p>We choose to pass in a reference to the whole <code>Reactor</code> here. This isn't normal.
-The reactor will often be a global resource which let's us register interests
-without passing around a reference.</p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>这大部分都是直截了当的。 令人困惑的部分是我们需要构建 Waker 的奇怪方式，但是由于我们已经从原始部分创建了我们自己的 trait 对象，这看起来很熟悉。 事实上，这更简单。</p>
+<p>我们在这里使用一个Arc来传递一个引用计数的MyWaker的借用。 这是相当正常的，并且使得这个操作变得简单和安全。 克隆一个Waker只是增加一个计数。Drop一个Waker只是简单地减少一个计数. </p>
+<p>在我们这种特定场景下,我们选择不使用<code>Arc</code>. 而使用这种更低层次方式实现的Waker才可以允许我们这么做.</p>
+<p>事实上，如果我们只使用 Arc，那么我们就没有理由费尽心思去创建自己的 vtable 和 RawWaker。 我们可以实现一个普通的trait。</p>
+<p>幸运的是，将来在标准库中也可以实现这个功能。 目前<a href="https://rust-lang-nursery.github.io/futures-api-docs/0.3.0-alpha.13/futures/task/trait.ArcWake.html">这个特性仍然在实验中</a>，但是我猜想在成熟之后，这个特性将会成为标准库的一部分。</p>
+<p>我们选择在这里传入一个整个reactor的引用, 这不正常。 reactor通常是一个全局性的资源，让我们注册感兴趣的事而不需要传入一个引用.</p>
 <blockquote>
-<h3><a class="header" href="#why-using-thread-parkunpark-is-a-bad-idea-for-a-library" id="why-using-thread-parkunpark-is-a-bad-idea-for-a-library">Why using thread park/unpark is a bad idea for a library</a></h3>
-<p>It could deadlock easily since anyone could get a handle to the <code>executor thread</code>
-and call park/unpark on it.</p>
+<p><strong>为什么在一个Lib中使用park/unpark是一个坏主意</strong></p>
+<p>他很容易死锁,因为任何人都可以获得执行器所在线程的句柄,然后调用park/unpark.</p>
+</blockquote>
+<blockquote>
 <ol>
-<li>A future could call <code>unpark</code> on the executor thread from a different thread</li>
-<li>Our <code>executor</code> thinks that data is ready and wakes up and polls the future</li>
-<li>The future is not ready yet when polled, but at that exact same time the 
-<code>Reactor</code> gets an event and calls <code>wake()</code> which also unparks our thread.</li>
-<li>This could happen before we go to sleep again since these processes
-run in parallel.</li>
-<li>Our reactor has called <code>wake</code> but our thread is still sleeping since it was
-awake already at that point.</li>
-<li>We're deadlocked and our program stops working</li>
+<li>一个future可以在另一个不同的线程上unpark执行器线程</li>
+<li>我们的执行器认为数据准备好了,然后醒来去轮询这个<code>Future</code></li>
+<li>当被轮询时,这个<code>Future</code>还没有准备好,但是恰在此时,<code>Reactor</code>收到事件,调用了<code>Wake()</code>来unpark我们的线程. </li>
+<li>这可能发生在我们再次睡眠之前,因为这些操作完全是并行的.</li>
+<li>我们的reactor已经调用过<code>wake</code>,但是我们的线程仍然在睡眠,因为刚刚调用wake的时候,我们的线程是醒着的.</li>
+<li>我们发生了死锁,然后我们的程序停止工作.</li>
 </ol>
 </blockquote>
 <blockquote>
-<p>There is also the case that our thread could have what's called a
-<code>spurious wakeup</code> (<a href="https://cfsamson.github.io/book-exploring-async-basics/9_3_http_module.html#bonus-section">which can happen unexpectedly</a>), which
-could cause the same deadlock if we're unlucky.</p>
+<p>有一种情况是，我们的线程可能会出现所谓的虚假唤醒(可能会出乎意料地发生) ，如果我们运气不好，这可能会导致同样的死锁</p>
 </blockquote>
-<p>There are several better solutions, here are some:</p>
+<p>有几种更好的方案,比如:</p>
 <ul>
-<li><a href="https://doc.rust-lang.org/stable/std/sync/struct.Condvar.html">std::sync::CondVar</a></li>
-<li><a href="https://docs.rs/crossbeam/0.7.3/crossbeam/sync/struct.Parker.html">crossbeam::sync::Parker</a></li>
+<li>std::sync::CondVar</li>
+<li>crossbeam::sync::Parker</li>
 </ul>
-<h2><a class="header" href="#the-reactor" id="the-reactor">The Reactor</a></h2>
-<p>This is the home stretch, and not strictly <code>Future</code> related, but we need one
-to have an example to run.</p>
-<p>Since concurrency mostly makes sense when interacting with the outside world (or
-at least some peripheral), we need something to actually abstract over this
-interaction in an asynchronous way.</p>
-<p>This is the <code>Reactors</code> job. Most often you'll see reactors in Rust use a library
-called <a href="https://github.com/tokio-rs/mio">Mio</a>, which provides non blocking APIs and event notification for
-several platforms.</p>
-<p>The reactor will typically give you something like a <code>TcpStream</code> (or any other
-resource) which you'll use to create an I/O request. What you get in return is a
-<code>Future</code>. </p>
-<blockquote>
-<p>If our reactor did some real I/O work our <code>Task</code> in would instead be represent
-a non-blocking <code>TcpStream</code> which registers interest with the global <code>Reactor</code>.
-Passing around a reference to the Reactor itself is pretty uncommon but I find
-it makes reasoning about what's happening easier.</p>
-</blockquote>
-<p>Our example task is a timer that only spawns a thread and puts it to sleep for
-the number of seconds we specify. The reactor we create here will create a
-<strong>leaf-future</strong> representing each timer. In return the Reactor receives a waker
-which it will call once the task is finished.</p>
-<p>To be able to run the code here in the browser there is not much real I/O we
-can do so just pretend that this is actually represents some useful I/O operation
-for the sake of this example.</p>
-<p><strong>Our Reactor will look like this:</strong></p>
-<pre><code class="language-rust noplaypen ignore">// This is a &quot;fake&quot; reactor. It does no real I/O, but that also makes our
+<h3><a class="header" href="#reactor" id="reactor">Reactor</a></h3>
+<p>这是最后的冲刺阶段，并不完全与<code>Future</code>相关，但是我们需要它来让我们的例子运行起来。</p>
+<p>由于大多数时候并发只有在与外部世界(或者至少是一些外围设备)进行交互时才有意义，因此我们需要一些东西来抽象这些异步的交互.</p>
+<p>这就是reacotor的工作. 大多数时候你看到的reactor都是用<a href="https://github.com/tokio-rs/mio">Mio</a>这个库. 它早多个平台上提供了非阻塞API和事件通知机制.</p>
+<p>reactor通常会提供类似于TcpStream(或任何其他资源)的东西，只不过您用TcpStream来创建I/O请求,而用reactor来创建Future.</p>
+<p>我们的示例任务是一个计时器，它只生成一个线程，并将其置于休眠状态，休眠时间为我们指定的秒数。 我们在这里创建的reactor将创建一个表示每个计时器的<code>leaf-future</code>。 作为回报，reactor接收到一个唤醒器，一旦任务完成reactor将调用这个唤醒器。</p>
+<p>为了能够在浏览器中运行这里的代码，没有太多真正的I/O，我们可以假装这实际上代表了一些有用的I/O操作。</p>
+<p>我们的reactor看起来像这样:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// This is a &quot;fake&quot; reactor. It does no real I/O, but that also makes our
+// code possible to run in the book and in the playground
+// The different states a task can have in this Reactor
+enum TaskState {
+    Ready,
+    NotReady(Waker),
+    Finished,
+}
+
+// This is a &quot;fake&quot; reactor. It does no real I/O, but that also makes our
 // code possible to run in the book and in the playground
 struct Reactor {
 
@@ -431,125 +403,130 @@ struct Reactor {
     dispatcher: Sender&lt;Event&gt;,
     handle: Option&lt;JoinHandle&lt;()&gt;&gt;,
 
-    // This is a list of tasks that are ready, which means they should be polled
-    // for data.
-    readylist: Arc&lt;Mutex&lt;Vec&lt;usize&gt;&gt;&gt;,
+    // This is a list of tasks
+    tasks: HashMap&lt;usize, TaskState&gt;,
 }
 
-// We just have two kind of events. An event called `Timeout`
-// and a `Close` event to close down our reactor.
+// This represents the Events we can send to our reactor thread. In this
+// example it's only a Timeout or a Close event.
 #[derive(Debug)]
 enum Event {
     Close,
-    Timeout(Waker, u64, usize),
+    Timeout(u64, usize),
 }
 
 impl Reactor {
-    fn new() -&gt; Self {
-        // The way we register new events with our reactor is using a regular
-        // channel
+
+    // We choose to return an atomic reference counted, mutex protected, heap
+    // allocated `Reactor`. Just to make it easy to explain... No, the reason
+    // we do this is:
+    //
+    // 1. We know that only thread-safe reactors will be created.
+    // 2. By heap allocating it we can obtain a reference to a stable address
+    // that's not dependent on the stack frame of the function that called `new`
+    fn new() -&gt; Arc&lt;Mutex&lt;Box&lt;Self&gt;&gt;&gt; {
         let (tx, rx) = channel::&lt;Event&gt;();
-        let readylist = Arc::new(Mutex::new(vec![]));
-        let rl_clone = readylist.clone();
+        let reactor = Arc::new(Mutex::new(Box::new(Reactor {
+            dispatcher: tx,
+            handle: None,
+            tasks: HashMap::new(),
+        })));
+        
+        // Notice that we'll need to use `weak` reference here. If we don't,
+        // our `Reactor` will not get `dropped` when our main thread is finished
+        // since we're holding internal references to it.
 
-        // This `Vec` will hold handles to all the threads we spawn so we can
-        // join them later on and finish our programm in a good manner
-        let mut handles = vec![];
+        // Since we're collecting all `JoinHandles` from the threads we spawn
+        // and make sure to join them we know that `Reactor` will be alive
+        // longer than any reference held by the threads we spawn here.
+        let reactor_clone = Arc::downgrade(&amp;reactor);
 
-        // This will be the &quot;Reactor thread&quot;
+        // This will be our Reactor-thread. The Reactor-thread will in our case
+        // just spawn new threads which will serve as timers for us.
         let handle = thread::spawn(move || {
+            let mut handles = vec![];
+
+            // This simulates some I/O resource
             for event in rx {
-                let rl_clone = rl_clone.clone();
+                println!(&quot;REACTOR: {:?}&quot;, event);
+                let reactor = reactor_clone.clone();
                 match event {
-
-                    // If we get a close event we break out of the loop we're in
                     Event::Close =&gt; break,
-                    Event::Timeout(waker, duration, id) =&gt; {
+                    Event::Timeout(duration, id) =&gt; {
 
-                        // When we get an event we simply spawn a new thread
-                        // which will simulate some I/O resource...
+                        // We spawn a new thread that will serve as a timer
+                        // and will call `wake` on the correct `Waker` once
+                        // it's done.
                         let event_handle = thread::spawn(move || {
-
-                            //... by sleeping for the number of seconds
-                            // we provided when creating the `Task`.
                             thread::sleep(Duration::from_secs(duration));
-
-                            // When it's done sleeping we put the ID of this task
-                            // on the &quot;readylist&quot;
-                            rl_clone.lock().map(|mut rl| rl.push(id)).unwrap();
-
-                            // Then we call `wake` which will wake up our
-                            // executor and start polling the futures
-                            waker.wake();
+                            let reactor = reactor.upgrade().unwrap();
+                            reactor.lock().map(|mut r| r.wake(id)).unwrap();
                         });
-
                         handles.push(event_handle);
                     }
                 }
             }
 
-            // When we exit the Reactor we first join all the handles on
-            // the child threads we've spawned so we catch any panics and
-            // release any resources.
-            for handle in handles {
-                handle.join().unwrap();
-            }
+            // This is important for us since we need to know that these
+            // threads don't live longer than our Reactor-thread. Our
+            // Reactor-thread will be joined when `Reactor` gets dropped.
+            handles.into_iter().for_each(|handle| handle.join().unwrap());
         });
+        reactor.lock().map(|mut r| r.handle = Some(handle)).unwrap();
+        reactor
+    }
 
-        Reactor {
-            readylist,
-            dispatcher: tx,
-            handle: Some(handle),
+    // The wake function will call wake on the waker for the task with the
+    // corresponding id.
+    fn wake(&amp;mut self, id: usize) {
+        self.tasks.get_mut(&amp;id).map(|state| {
+
+            // No matter what state the task was in we can safely set it
+            // to ready at this point. This lets us get ownership over the
+            // the data that was there before we replaced it.
+            match mem::replace(state, TaskState::Ready) {
+                TaskState::NotReady(waker) =&gt; waker.wake(),
+                TaskState::Finished =&gt; panic!(&quot;Called 'wake' twice on task: {}&quot;, id),
+                _ =&gt; unreachable!()
+            }
+        }).unwrap();
+    }
+
+    // Register a new task with the reactor. In this particular example
+    // we panic if a task with the same id get's registered twice 
+    fn register(&amp;mut self, duration: u64, waker: Waker, id: usize) {
+        if self.tasks.insert(id, TaskState::NotReady(waker)).is_some() {
+            panic!(&quot;Tried to insert a task with id: '{}', twice!&quot;, id);
         }
+        self.dispatcher.send(Event::Timeout(duration, id)).unwrap();
     }
 
-    fn register(&amp;mut self, duration: u64, waker: Waker, data: usize) {
-
-        // registering an event is as simple as sending an `Event` through
-        // the channel.
-        self.dispatcher
-            .send(Event::Timeout(waker, duration, data))
-            .unwrap();
-    }
-
+    // We send a close event to the reactor so it closes down our reactor-thread
     fn close(&amp;mut self) {
         self.dispatcher.send(Event::Close).unwrap();
     }
 
-    // We need a way to check if any event's are ready. This will simply
-    // look through the &quot;readylist&quot; for an event macthing the ID we want to
-    // check for.
-    fn is_ready(&amp;self, id_to_check: usize) -&gt; bool {
-        self.readylist
-            .lock()
-            .map(|rl| rl.iter().any(|id| *id == id_to_check))
-            .unwrap()
+    // We simply checks if a task with this id is in the state `TaskState::Ready`
+    fn is_ready(&amp;self, id: usize) -&gt; bool {
+        self.tasks.get(&amp;id).map(|state| match state {
+            TaskState::Ready =&gt; true,
+            _ =&gt; false,
+        }).unwrap_or(false)
     }
 }
 
-// When our `Reactor` is dropped we join the reactor thread with the thread
-// owning our `Reactor` so we catch any panics and release all resources.
-// It's not needed for this to work, but it really is a best practice to join
-// all threads you spawn.
 impl Drop for Reactor {
     fn drop(&amp;mut self) {
         self.handle.take().map(|h| h.join().unwrap()).unwrap();
     }
 }
-</code></pre>
-<p>It's a lot of code though, but essentially we just spawn off a new thread
-and make it sleep for some time which we specify when we create a <code>Task</code>.</p>
-<p>Now, let's test our code and see if it works. Since we're sleeping for a couple
-of seconds here, just give it some time to run.</p>
-<p>In the last chapter we have the <a href="./8_finished_example.html">whole 200 lines in an editable window</a>
-which you can edit and change the way you like.</p>
-<pre><pre class="playpen"><code class="language-rust edition2018"><span class="boring">use std::{
-</span><span class="boring">    future::Future, pin::Pin, sync::{mpsc::{channel, Sender}, Arc, Mutex},
-</span><span class="boring">    task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
-</span><span class="boring">    thread::{self, JoinHandle}, time::{Duration, Instant}
-</span><span class="boring">};
-</span><span class="boring">
-</span>fn main() {
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>虽然代码量很大，但实际上我们只是产生了一个新线程，并让它休眠一段时间，这是我们在创建任务时指定的。</p>
+<p>虽然代码量很大，但实际上我们只是产生了一个新线程，并让它休眠一段时间，这是我们在创建任务时指定的。</p>
+<p>在最后一章中，我们在一个可编辑的窗口中有整整200行，你可以按照自己喜欢的方式进行编辑和修改。</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     // This is just to make it easier for us to see when our Future was resolved
     let start = Instant::now();
 
@@ -597,208 +574,127 @@ which you can edit and change the way you like.</p>
     reactor.lock().map(|mut r| r.close()).unwrap();
 }
 
-<span class="boring">// ============================= EXECUTOR ====================================
-</span><span class="boring">fn block_on&lt;F: Future&gt;(mut future: F) -&gt; F::Output {
-</span><span class="boring">    let mywaker = Arc::new(MyWaker{ thread: thread::current() }); 
-</span><span class="boring">    let waker = waker_into_waker(Arc::into_raw(mywaker));
-</span><span class="boring">    let mut cx = Context::from_waker(&amp;waker);
-</span><span class="boring">    let val = loop {
-</span><span class="boring">        let pinned = unsafe { Pin::new_unchecked(&amp;mut future) };
-</span><span class="boring">        match Future::poll(pinned, &amp;mut cx) {
-</span><span class="boring">            Poll::Ready(val) =&gt; break val,
-</span><span class="boring">            Poll::Pending =&gt; thread::park(),
-</span><span class="boring">        };
-</span><span class="boring">    };
-</span><span class="boring">    val
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">// ====================== FUTURE IMPLEMENTATION ==============================
-</span><span class="boring">#[derive(Clone)]
-</span><span class="boring">struct MyWaker {
-</span><span class="boring">    thread: thread::Thread,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">#[derive(Clone)]
-</span><span class="boring">pub struct Task {
-</span><span class="boring">    id: usize,
-</span><span class="boring">    reactor: Arc&lt;Mutex&lt;Reactor&gt;&gt;,
-</span><span class="boring">    data: u64,
-</span><span class="boring">    is_registered: bool,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">fn mywaker_wake(s: &amp;MyWaker) {
-</span><span class="boring">    let waker_ptr: *const MyWaker = s;
-</span><span class="boring">    let waker_arc = unsafe {Arc::from_raw(waker_ptr)};
-</span><span class="boring">    waker_arc.thread.unpark();
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">fn mywaker_clone(s: &amp;MyWaker) -&gt; RawWaker {
-</span><span class="boring">    let arc = unsafe { Arc::from_raw(s).clone() };
-</span><span class="boring">    std::mem::forget(arc.clone()); // increase ref count
-</span><span class="boring">    RawWaker::new(Arc::into_raw(arc) as *const (), &amp;VTABLE)
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">const VTABLE: RawWakerVTable = unsafe {
-</span><span class="boring">    RawWakerVTable::new(
-</span><span class="boring">        |s| mywaker_clone(&amp;*(s as *const MyWaker)),     // clone
-</span><span class="boring">        |s| mywaker_wake(&amp;*(s as *const MyWaker)),      // wake
-</span><span class="boring">        |s| mywaker_wake(*(s as *const &amp;MyWaker)),      // wake by ref
-</span><span class="boring">        |s| drop(Arc::from_raw(s as *const MyWaker)),   // decrease refcount
-</span><span class="boring">    )
-</span><span class="boring">};
-</span><span class="boring">
-</span><span class="boring">fn waker_into_waker(s: *const MyWaker) -&gt; Waker {
-</span><span class="boring">    let raw_waker = RawWaker::new(s as *const (), &amp;VTABLE);
-</span><span class="boring">    unsafe { Waker::from_raw(raw_waker) }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Task {
-</span><span class="boring">    fn new(reactor: Arc&lt;Mutex&lt;Reactor&gt;&gt;, data: u64, id: usize) -&gt; Self {
-</span><span class="boring">        Task {
-</span><span class="boring">            id,
-</span><span class="boring">            reactor,
-</span><span class="boring">            data,
-</span><span class="boring">            is_registered: false,
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Future for Task {
-</span><span class="boring">    type Output = usize;
-</span><span class="boring">    fn poll(mut self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt; {
-</span><span class="boring">        let mut r = self.reactor.lock().unwrap();
-</span><span class="boring">        if r.is_ready(self.id) {
-</span><span class="boring">            Poll::Ready(self.id)
-</span><span class="boring">        } else if self.is_registered {
-</span><span class="boring">            Poll::Pending
-</span><span class="boring">        } else {
-</span><span class="boring">            r.register(self.data, cx.waker().clone(), self.id);
-</span><span class="boring">            drop(r);
-</span><span class="boring">            self.is_registered = true;
-</span><span class="boring">            Poll::Pending
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">// =============================== REACTOR ===================================
-</span><span class="boring">struct Reactor {
-</span><span class="boring">    dispatcher: Sender&lt;Event&gt;,
-</span><span class="boring">    handle: Option&lt;JoinHandle&lt;()&gt;&gt;,
-</span><span class="boring">    readylist: Arc&lt;Mutex&lt;Vec&lt;usize&gt;&gt;&gt;,
-</span><span class="boring">}
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">enum Event {
-</span><span class="boring">    Close,
-</span><span class="boring">    Timeout(Waker, u64, usize),
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Reactor {
-</span><span class="boring">    fn new() -&gt; Self {
-</span><span class="boring">        let (tx, rx) = channel::&lt;Event&gt;();
-</span><span class="boring">        let readylist = Arc::new(Mutex::new(vec![]));
-</span><span class="boring">        let rl_clone = readylist.clone();
-</span><span class="boring">        let mut handles = vec![];
-</span><span class="boring">        let handle = thread::spawn(move || {
-</span><span class="boring">            // This simulates some I/O resource
-</span><span class="boring">            for event in rx {
-</span><span class="boring">                println!(&quot;REACTOR: {:?}&quot;, event);
-</span><span class="boring">                let rl_clone = rl_clone.clone();
-</span><span class="boring">                match event {
-</span><span class="boring">                    Event::Close =&gt; break,
-</span><span class="boring">                    Event::Timeout(waker, duration, id) =&gt; {
-</span><span class="boring">                        let event_handle = thread::spawn(move || {
-</span><span class="boring">                            thread::sleep(Duration::from_secs(duration));
-</span><span class="boring">                            rl_clone.lock().map(|mut rl| rl.push(id)).unwrap();
-</span><span class="boring">                            waker.wake();
-</span><span class="boring">                        });
-</span><span class="boring">
-</span><span class="boring">                        handles.push(event_handle);
-</span><span class="boring">                    }
-</span><span class="boring">                }
-</span><span class="boring">            }
-</span><span class="boring">
-</span><span class="boring">            for handle in handles {
-</span><span class="boring">                handle.join().unwrap();
-</span><span class="boring">            }
-</span><span class="boring">        });
-</span><span class="boring">
-</span><span class="boring">        Reactor {
-</span><span class="boring">            readylist,
-</span><span class="boring">            dispatcher: tx,
-</span><span class="boring">            handle: Some(handle),
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn register(&amp;mut self, duration: u64, waker: Waker, data: usize) {
-</span><span class="boring">        self.dispatcher
-</span><span class="boring">            .send(Event::Timeout(waker, duration, data))
-</span><span class="boring">            .unwrap();
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn close(&amp;mut self) {
-</span><span class="boring">        self.dispatcher.send(Event::Close).unwrap();
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn is_ready(&amp;self, id_to_check: usize) -&gt; bool {
-</span><span class="boring">        self.readylist
-</span><span class="boring">            .lock()
-</span><span class="boring">            .map(|rl| rl.iter().any(|id| *id == id_to_check))
-</span><span class="boring">            .unwrap()
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Drop for Reactor {
-</span><span class="boring">    fn drop(&amp;mut self) {
-</span><span class="boring">        self.handle.take().map(|h| h.join().unwrap()).unwrap();
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>I added a debug printout of the events the reactor registered interest for so we can observe
-two things:</p>
+</code></pre></pre>
+<p>我添加了一个reactor感兴趣的事件的调试输出，这样我们可以观察到两件事:</p>
 <ol>
-<li>How the <code>Waker</code> object looks just like the <em>trait object</em> we talked about in an earlier chapter</li>
-<li>In what order the events register interest with the reactor</li>
+<li><code>Waker</code>这个对象如何像前面我们讨论的trai对象</li>
+<li>事件以何种顺序向reactor注册感兴趣的信息</li>
 </ol>
-<p>The last point is relevant when we move on the the last paragraph.</p>
-<h2><a class="header" href="#asyncawait-and-concurrecy" id="asyncawait-and-concurrecy">Async/Await and concurrecy</a></h2>
-<p>The <code>async</code> keyword can be used on functions as in <code>async fn(...)</code> or on a
-block as in <code>async { ... }</code>. Both will turn your function, or block, into a
-<code>Future</code>.</p>
-<p>These <code>Futures</code> are rather simple. Imagine our generator from a few chapters
-back. Every <code>await</code> point is like a <code>yield</code> point.</p>
-<p>Instead of <code>yielding</code> a value we pass in, we yield the result of calling <code>poll</code> on
-the next <code>Future</code> we're awaiting.</p>
-<p>Our <code>mainfut</code> contains two non-leaf futures which it will call <code>poll</code> on. <strong>Non-leaf-futures</strong>
-has a <code>poll</code> method that simply polls their inner futures and these state machines
-are polled until some &quot;leaf future&quot; in the end either returns <code>Ready</code> or <code>Pending</code>.</p>
-<p>The way our example is right now, it's not much better than regular synchronous
-code. For us to actually await multiple futures at the same time we somehow need
-to <code>spawn</code> them so the executor starts running them concurrently.</p>
-<p>Our example as it stands now returns this:</p>
-<pre><code class="language-ignore">Future got 1 at time: 1.00.
+<h3><a class="header" href="#asyncawait和并发asyncawait" id="asyncawait和并发asyncawait">Async/Await和并发Async/Await</a></h3>
+<p>Async 关键字可以用在 async fn (...)中的函数上，也可以用在 async { ... }中的块上。 两者都可以讲一个函数或者代码块转换成一个<code>Future</code></p>
+<p>这些<code>Future</code>是相当简单的。 想象一下几章前我们的生成器。 </p>
+<p>每一个await就像一个yield,只不过不是生成一个值,而是生成Future,然后当轮询的时候返回响应的结果.</p>
+<p>我们的<code>mainfut</code>包含两个<code>non-leaf-future</code>，它将在轮询中调用。<code>non-leaf-future</code>有一个<code>poll</code>方法, 这个方法简单的轮询他自己的内部Future,它内部的Future会被继续轮询,直到<code>leaf-future</code>返回<code>Ready</code>或者<code>Pending</code>.</p>
+<p>就我们现在的例子来看，它并不比常规的同步代码好多少。 对于我们来说，如果需要在同一时间等待多个<code>Future</code>，我们需要<code>spawn</code>它们，以便执行器同时运行它们。</p>
+<p>现在我们的例子返回如下结果:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>Future got 1 at time: 1.00.
 Future got 2 at time: 3.00.
-</code></pre>
-<p>If these <code>Futures</code> were executed asynchronously we would expect to see:</p>
-<pre><code class="language-ignore">Future got 1 at time: 1.00.
+<span class="boring">}
+</span></code></pre></pre>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>Future got 1 at time: 1.00.
 Future got 2 at time: 2.00.
-</code></pre>
+<span class="boring">}
+</span></code></pre></pre>
 <blockquote>
-<p>Note that this doesn't mean they need to run in parallel. They <em>can</em> run in
-parallel but there is no requirement. Remember that we're waiting for some
-external resource so we can fire off many such calls on a single thread and
-handle each event as it resolves.</p>
+<p>请注意，这并不意味着它们需要并行运行。 它们可以并行运行，但没有要求。 请记住，我们正在等待一些外部资源，这样我们就可以在一个线程上发出许多这样的调用，并在事件发生时处理每个事件</p>
 </blockquote>
-<p>Now, this is the point where I'll refer you to some better resources for
-implementing a better executor. You should have a pretty good understanding of
-the concept of Futures by now helping you along the way.</p>
-<p>The next step should be getting to know how more advanced runtimes work and
-how they implement different ways of running Futures to completion.</p>
-<p><a href="./conclusion.html#building-a-better-exectuor">If I were you I would read this next, and try to implement it for our example.</a>.</p>
-<p>That's actually it for now. There as probably much more to learn, this is enough
-for today. </p>
-<p>I hope exploring Futures and async in general gets easier after this read and I
-do really hope that you do continue to explore further.</p>
-<p>Don't forget the exercises in the last chapter 😊.</p>
+<p>现在，我将向您介绍一些更好的资源，以实现一个更好的执行器。 现在你应该已经对<code>Future</code>的概念有了一个很好的理解。</p>
+<p>下一步应该是了解更高级的运行时是如何工作的，以及它们如何实现不同的运行 Futures 的方式。</p>
+<p>如果我是你，我接下来就会读这篇文章，并试着把它应用到我们的例子中去。</p>
+<p>我希望在阅读完这篇文章后，能够更容易地探索Future和异步，我真的希望你们能够继续深入探索。</p>
+<p>别忘了最后一章的练习。</p>
+<h3><a class="header" href="#奖励部分-暂停线程的更好办法" id="奖励部分-暂停线程的更好办法">奖励部分-暂停线程的更好办法</a></h3>
+<p>正如我们在本章前面解释的那样，仅仅调用<code>thread::sleep</code> 并不足以实现一个合适的反应器。 你也可以使用类似<a href="https://docs.rs/crossbeam/0.7.3/crossbeam/sync/struct.Parker.html">crossbeam::sync::Parker</a>中的Parker 这样的工具.</p>
+<p>因为我们自己创建一个这样的Parker也不需要很多行代码，所以我们将展示如何通过使用 Condvar 和 Mutex 来解决这个问题。</p>
+<p>我们自己的Parker:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>#[derive(Default)]
+struct Parker(Mutex&lt;bool&gt;, Condvar);
+
+impl Parker {
+    fn park(&amp;self) {
+
+        // We aquire a lock to the Mutex which protects our flag indicating if we
+        // should resume execution or not.
+        let mut resumable = self.0.lock().unwrap();
+
+            // We put this in a loop since there is a chance we'll get woken, but
+            // our flag hasn't changed. If that happens, we simply go back to sleep.
+            while !*resumable {
+
+                // We sleep until someone notifies us
+                resumable = self.1.wait(resumable).unwrap();
+            }
+
+        // We immidiately set the condition to false, so that next time we call `park` we'll
+        // go right to sleep.
+        *resumable = false;
+    }
+
+    fn unpark(&amp;self) {
+        // We simply acquire a lock to our flag and sets the condition to `runnable` when we
+        // get it.
+        *self.0.lock().unwrap() = true;
+
+        // We notify our `Condvar` so it wakes up and resumes.
+        self.1.notify_one();
+    }
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>在 Rust 中的 Condvar 被设计为与互斥对象一起工作。 通常，您会认为在我们进入休眠之前,<code>self.0.lock().unwrap()</code>不会释放锁, 这意味着我们的<code>unpark</code>永远获取不到锁,我们会陷入死锁。</p>
+<p>使用<code>Condvar</code>我们可以避免这种情况，因为<code>Condvar</code>会消耗我们的锁，所以它会在我们睡觉的时候释放。
+当我们再次恢复时，我们的<code>Condvar</code>会重新持有锁，这样我们就可以继续操作它。
+这意味着我们需要对我们的执行器做一些非常细微的改变，比如:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>fn block_on&lt;F: Future&gt;(mut future: F) -&gt; F::Output {
+    let parker = Arc::new(Parker::default()); // &lt;--- NB!
+    let mywaker = Arc::new(MyWaker { parker: parker.clone() }); &lt;--- NB!
+    let waker = mywaker_into_waker(Arc::into_raw(mywaker));
+    let mut cx = Context::from_waker(&amp;waker);
+    
+    // SAFETY: we shadow `future` so it can't be accessed again.
+    let mut future = unsafe { Pin::new_unchecked(&amp;mut future) }; 
+    loop {
+        match Future::poll(future.as_mut(), &amp;mut cx) {
+            Poll::Ready(val) =&gt; break val,
+            Poll::Pending =&gt; parker.park(), // &lt;--- NB!
+        };
+    }
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>我们需要像这样改变我们的唤醒器:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone)]
+struct MyWaker {
+    parker: Arc&lt;Parker&gt;,
+}
+
+fn mywaker_wake(s: &amp;MyWaker) {
+    let waker_arc = unsafe { Arc::from_raw(s) };
+    waker_arc.parker.unpark();
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<blockquote>
+<p>你可以查看由park/unpark引起的<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=b2343661fe3d271c91c6977ab8e681d0">微妙问题的连接</a>. 你可以在<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=bebef0f8a8ce6a9d0d32442cc8381595">这里</a>查看我们最终的版本如何避免了这个问题.</p>
+</blockquote>
 
                     </main>
 
@@ -823,13 +719,13 @@ do really hope that you do continue to explore further.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="4_pin.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="4_pin.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="8_finished_example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="8_finished_example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -837,21 +733,6 @@ do really hope that you do continue to explore further.</p>
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3001");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload(true); // force reload from server (not from cache)
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

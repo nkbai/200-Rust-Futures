@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Generators and async/await - Futures Explained in 200 Lines of Rust</title>
+        <title>生成器和async/await - Futures Explained in 200 Lines of Rust</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -80,8 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> Background information</a></li><li class="expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Futures in Rust</a></li><li class="expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> Waker and Context</a></li><li class="expanded "><a href="3_generators_async_await.html" class="active"><strong aria-hidden="true">4.</strong> Generators and async/await</a></li><li class="expanded "><a href="4_pin.html"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="expanded "><a href="6_future_example.html"><strong aria-hidden="true">6.</strong> Implementing Futures</a></li><li class="expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> Finished example (editable)</a></li><li class="expanded affix "><a href="conclusion.html">Conclusion and exercises</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">引言</a></li><li class="chapter-item expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> 背景资料</a></li><li class="chapter-item expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Rust中的Futures</a></li><li class="chapter-item expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> 唤醒器和上下文</a></li><li class="chapter-item expanded "><a href="3_generators_async_await.html" class="active"><strong aria-hidden="true">4.</strong> 生成器和async/await</a></li><li class="chapter-item expanded "><a href="4_pin.html"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="chapter-item expanded "><a href="6_future_example.html"><strong aria-hidden="true">6.</strong> 实现Futures--主要例子</a></li><li class="chapter-item expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> 完整的例子</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">结论和练习</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -90,41 +90,40 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
+                    <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -152,95 +151,76 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#generators-and-asyncawait" id="generators-and-asyncawait">Generators and async/await</a></h1>
-<blockquote>
-<p><strong>Overview:</strong></p>
-<ul>
-<li>Understand how the async/await syntax works under the hood</li>
-<li>See first hand why we need <code>Pin</code></li>
-<li>Understand what makes Rusts async model very memory efficient</li>
-</ul>
-<p>The motivation for <code>Generators</code> can be found in <a href="https://github.com/rust-lang/rfcs/blob/master/text/2033-experimental-coroutines.md">RFC#2033</a>. It's very
-well written and I can recommend reading through it (it talks as much about
-async/await as it does about generators).</p>
-</blockquote>
-<h2><a class="header" href="#why-learn-about-generators" id="why-learn-about-generators">Why learn about generators?</a></h2>
-<p>Generators/yield and async/await are so similar that once you understand one
-you should be able to understand the other.</p>
-<p>It's much easier for me to provide runnable and short examples using Generators
-instead of Futures which require us to introduce a lot of concepts now that
-we'll cover later just to show an example.</p>
-<p>Async/await works like generators but instead of returning a generator it returns
-a special object implementing the Future trait.</p>
-<p>A small bonus is that you'll have a pretty good introduction to both Generators
-and Async/Await by the end of this chapter.</p>
-<p>Basically, there were three main options discussed when designing how Rust would
-handle concurrency:</p>
+                        <h2><a class="header" href="#生成器和asyncawait" id="生成器和asyncawait">生成器和async/await</a></h2>
+<h3><a class="header" href="#概述" id="概述">概述</a></h3>
 <ol>
-<li>Stackful coroutines, better known as green threads.</li>
-<li>Using combinators.</li>
-<li>Stackless coroutines, better known as generators.</li>
+<li>理解 async / await 语法在底层是如何工作的</li>
+<li>亲眼目睹(See first hand)我们为什么需要Pin</li>
+<li>理解是什么让 Rusts 异步模型的内存效率非常高</li>
 </ol>
-<p>We covered <a href="0_background_information.html#green-threads">green threads in the background information</a>
-so we won't repeat that here. We'll concentrate on the variants of stackless
-coroutines which Rust uses today.</p>
-<h3><a class="header" href="#combinators" id="combinators">Combinators</a></h3>
-<p><code>Futures 0.1</code> used combinators. If you've worked with <code>Promises</code> in JavaScript,
-you already know combinators. In Rust they look like this:</p>
-<pre><code class="language-rust noplaypen ignore">let future = Connection::connect(conn_str).and_then(|conn| {
+<p>生成器的动机可以在 <a href="https://github.com/rust-lang/rfcs/blob/master/text/2033-experimental-coroutines.md">RFC#2033</a>中找到。 它写得非常好，我建议您通读它(它谈论async/await的内容和谈论生成器的内容一样多)。</p>
+<h3><a class="header" href="#为什么要学习生成器" id="为什么要学习生成器">为什么要学习生成器</a></h3>
+<p>generators/yield和 async/await 非常相似，一旦理解了其中一个，就应该能够理解另一个。</p>
+<p>对我来说，使用Generators而不是 Futures 来提供可运行的和简短的示例要容易得多，这需要我们现在引入很多概念，稍后我们将介绍这些概念，以便展示示例。</p>
+<p>Async/await 的工作方式类似于生成器，但它不返回生成器，而是返回一个实现 Future trait 的特殊对象。</p>
+<p>一个小小的好处是，在本章的最后，你将有一个很好的关于生成器和 async / await 的介绍。</p>
+<p>基本上，在设计 Rust 如何处理并发时，主要讨论了三个选项:</p>
+<ol>
+<li>Green Thread. </li>
+<li>使用组合符(Using combinators.)</li>
+<li>Generator, 没有专门的栈</li>
+</ol>
+<p>我们在背景信息中覆盖了绿色线程，所以我们不会在这里重复。 我们将集中在各种各样的无堆栈协同程序,这也就是Rust正在使用的.</p>
+<h3><a class="header" href="#组合子combinators" id="组合子combinators">组合子(Combinators)</a></h3>
+<p>在<code>Futures 0.1</code>中使用组合子.如果你曾经是用过Javascript中的<code>Promises</code>,那么你已经比较熟悉combinators了. 在Rust中,他们看起来如下:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let future = Connection::connect(conn_str).and_then(|conn| {
     conn.query(&quot;somerequest&quot;).map(|row|{
         SomeStruct::from(row)
     }).collect::&lt;Vec&lt;SomeStruct&gt;&gt;()
 });
 
 let rows: Result&lt;Vec&lt;SomeStruct&gt;, SomeLibraryError&gt; = block_on(future);
-
-</code></pre>
-<p><strong>There are mainly three downsides I'll focus on using this technique:</strong></p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>使用这个技巧主要有三个缺点:</p>
 <ol>
-<li>The error messages produced could be extremely long and arcane</li>
-<li>Not optimal memory usage</li>
-<li>Did not allow to borrow across combinator steps.</li>
+<li>错误消息可能会冗长并且难懂</li>
+<li>不是最佳的内存使用(浪费内存)</li>
+<li>Rust中不允许跨组合子借用.</li>
 </ol>
-<p>Point #3, is actually a major drawback with <code>Futures 0.1</code>.</p>
-<p>Not allowing borrows across suspension points ends up being very
-un-ergonomic and to accomplish some tasks it requires extra allocations or
-copying which is inefficient.</p>
-<p>The reason for the higher than optimal memory usage is that this is basically
-a callback-based approach, where each closure stores all the data it needs
-for computation. This means that as we chain these, the memory required to store
-the needed state increases with each added step.</p>
-<h3><a class="header" href="#stackless-coroutinesgenerators" id="stackless-coroutinesgenerators">Stackless coroutines/generators</a></h3>
-<p>This is the model used in Rust today. It has a few notable advantages:</p>
+<p>其中第三点是这种方式的主要缺点.</p>
+<p>不允许跨组合子借用，结果是非常不符合人体工程学的.为了完成某些任务，需要额外的内存分配或者复制，这很低效。</p>
+<p>内存占用高的原因是，这基本上是一种基于回调的方法，其中每个闭包存储计算所需的所有数据。 这意味着，随着我们将它们链接起来，存储所需状态所需的内存会随着每一步的增加而增加。</p>
+<h3><a class="header" href="#无栈协程生成器" id="无栈协程生成器">无栈协程/生成器</a></h3>
+<p>这就是今天 Rust 使用的模型，它有几个显著的优点:</p>
 <ol>
-<li>It's easy to convert normal Rust code to a stackless coroutine using using
-async/await as keywords (it can even be done using a macro).</li>
-<li>No need for context switching and saving/restoring CPU state</li>
-<li>No need to handle dynamic stack allocation</li>
-<li>Very memory efficient</li>
-<li>Allows us to borrow across suspension points</li>
+<li>使用 async/await 作为关键字，可以很容易地将普通的Rust代码转换为无堆栈的协程(甚至可以使用宏来完成)</li>
+<li>不需要上下文切换与保存恢复CPU状态</li>
+<li>不需要处理的动态栈分配</li>
+<li>内存效率高</li>
+<li>允许我们块暂停点(suspension)借用 <strong>这是啥意思啊</strong></li>
 </ol>
-<p>The last point is in contrast to <code>Futures 0.1</code>. With async/await we can do this:</p>
-<pre><code class="language-rust ignore">async fn myfn() {
+<p>与Futures 0.1不一样，使用async/ await 我们可以这样做:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>async fn myfn() {
     let text = String::from(&quot;Hello world&quot;);
     let borrowed = &amp;text[0..5];
     somefuture.await;
     println!(&quot;{}&quot;, borrowed);
 }
-</code></pre>
-<p>Async in Rust is implemented using Generators. So to understand how async really
-works we need to understand generators first. Generators in Rust are implemented
-as state machines. </p>
-<p>The memory footprint of a chain of computations is defined by <em>the largest footprint
-that a single step requires</em>.</p>
-<p>That means that adding steps to a chain of computations might not require any
-increased memory at all and it's one of the reasons why Futures and Async in
-Rust has very little overhead.</p>
-<h2><a class="header" href="#how-generators-work" id="how-generators-work">How generators work</a></h2>
-<p>In Nightly Rust today you can use the <code>yield</code> keyword. Basically using this
-keyword in a closure, converts it to a generator. A closure could look like this
-before we had a concept of <code>Pin</code>:</p>
-<pre><code class="language-rust noplaypen ignore">#![feature(generators, generator_trait)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>Rust中的异步使用生成器实现.  因此为了理解异步是如何工作的，我们首先需要理解生成器。 在Rust中，生成器被实现为状态机。</p>
+<p>一个计算链的内存占用是由占用空间最大的那个步骤定义的。</p>
+<p>这意味着在计算链中添加步骤可能根本不需要增加任何内存，这也是为什么Futures和 Async 在 Rust 中的开销很小的原因之一。</p>
+<h3><a class="header" href="#生成器是如何工作的" id="生成器是如何工作的">生成器是如何工作的</a></h3>
+<p>在今天的 Nightly Rust 中，你可以使用关键词 yield。 在闭包中使用这个关键字，将其转换为生成器。 在介绍Pin之前，闭包是这样的:</p>
+<pre><pre class="playpen"><code class="language-rust"> #![feature(generators, generator_trait)]
 use std::ops::{Generator, GeneratorState};
 
 fn main() {
@@ -259,9 +239,8 @@ fn main() {
         ()
     };
 }
-</code></pre>
-<p>Early on, before there was a consensus about the design of <code>Pin</code>, this
-compiled to something looking similar to this:</p>
+</code></pre></pre>
+<p>早些时候，在人们对 Pin 的设计达成共识之前，编译完代码看起来类似于这样:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let mut gen = GeneratorA::start(4);
 
@@ -328,54 +307,51 @@ impl Generator for GeneratorA {
 }
 
 </code></pre></pre>
+<p>关键词yield首先在<a href="https://github.com/rust-lang/rfcs/pull/1823">RFC#1823</a>和 <a href="https://github.com/rust-lang/rfcs/pull/1832">RFC#1832</a>中讨论。</p>
+<p>既然您知道了现实中的 yield 关键字会将代码重写为状态机，那么您还将了解await 如何工作的,他们非常相似.</p>
+<p>上述简单的状态机中有一些限制,当跨yield发生借用的时候会发生什么呢?</p>
+<p>我们可以禁止这样做，但async/await 语法的主要设计目标之一就是允许这样做。 这些类型的借用是不可能使用<code>Futures 0.1</code>，所以我们不能让这个限制存在。</p>
+<p>与其在理论上讨论它，不如让我们来看看一些代码。</p>
 <blockquote>
-<p>The <code>yield</code> keyword was discussed first in <a href="https://github.com/rust-lang/rfcs/pull/1823">RFC#1823</a> and in <a href="https://github.com/rust-lang/rfcs/pull/1832">RFC#1832</a>.</p>
+<p>我们将使用目前 Rust 中使用的状态机的优化版本。 更深入的解释见 Tyler Mandry 的文章: <a href="https://tmandry.gitlab.io/blog/posts/optimizing-await-1/">Rust 如何优化async/await</a></p>
 </blockquote>
-<p>Now that you know that the <code>yield</code> keyword in reality rewrites your code to become a state machine,
-you'll also know the basics of how <code>await</code> works. It's very similar.</p>
-<p>Now, there are some limitations in our naive state machine above. What happens when you have a 
-<code>borrow</code> across a <code>yield</code> point?</p>
-<p>We could forbid that, but <strong>one of the major design goals for the async/await syntax has been
-to allow this</strong>. These kinds of borrows were not possible using <code>Futures 0.1</code> so we can't let this
-limitation just slip and call it a day yet.</p>
-<p>Instead of discussing it in theory, let's look at some code.</p>
-<blockquote>
-<p>We'll use the optimized version of the state machines which is used in Rust today. For a more
-in depth explanation see <a href="https://tmandry.gitlab.io/blog/posts/optimizing-await-1/">Tyler Mandry's excellent article: How Rust optimizes async/await</a></p>
-</blockquote>
-<pre><code class="language-rust noplaypen ignore">let mut generator = move || {
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let mut generator = move || {
         let to_borrow = String::from(&quot;Hello&quot;);
         let borrowed = &amp;to_borrow;
         yield borrowed.len();
         println!(&quot;{} world!&quot;, borrowed);
     };
-</code></pre>
-<p>We'll be hand-coding some versions of a state-machines representing a state
-machine for the generator defined aboce.</p>
-<p>We step through each step &quot;manually&quot; in every example, so it looks pretty
-unfamiliar. We could add some syntactic sugar like implementing the <code>Iterator</code>
-trait for our generators which would let us do this:</p>
-<pre><code class="language-rust ignore">while let Some(val) = generator.next() {
-    println!(&quot;{}&quot;, val);
-}
-</code></pre>
-<p>It's a pretty trivial change to make, but this chapter is already getting long.
-Just keep this in the back of your head as we move forward.</p>
-<p>Now what does our rewritten state machine look like with this example?</p>
-<pre><pre class="playpen"><code class="language-rust compile_fail">
+<span class="boring">}
+</span></code></pre></pre>
+<p>我们将手工编写一些版本的状态机，这些状态机表示生成器定义的状态机。</p>
+<p>在每个示例中，我们都是“手动”逐步完成每个步骤，因此它看起来非常陌生。 我们可以添加一些语法糖，比如为我们的生成器实现 Iterator trait，这样我们就可以这样做:</p>
+<pre><pre class="playpen"><code class="language-rust">
 <span class="boring">#![allow(unused_variables)]
 </span><span class="boring">fn main() {
-</span><span class="boring">enum GeneratorState&lt;Y, R&gt; {
-</span><span class="boring">    Yielded(Y), 
-</span><span class="boring">    Complete(R),
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">trait Generator {
-</span><span class="boring">    type Yield;
-</span><span class="boring">    type Return;
-</span><span class="boring">    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt;;
-</span><span class="boring">}
-</span>
+</span>while let Some(val) = generator.next() {
+    println!(&quot;{}&quot;, val);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>这是一个相当微不足道的改变，但是这一章已经变得很长了。我们继续前进的时候，请牢牢记住这点。</p>
+<p>现在，我们的重写状态机在这个示例中看起来是什么样子的？</p>
+<pre><pre class="playpen"><code class="language-rust">
+ #![allow(unused_variables)]
+fn main() {
+enum GeneratorState&lt;Y, R&gt; {
+    Yielded(Y), 
+    Complete(R),
+}
+
+trait Generator {
+    type Yield;
+    type Return;
+    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt;;
+}
+
 enum GeneratorA {
     Enter,
     Yield1 {
@@ -385,12 +361,12 @@ enum GeneratorA {
     Exit,
 }
 
-<span class="boring">impl GeneratorA {
-</span><span class="boring">    fn start() -&gt; Self {
-</span><span class="boring">        GeneratorA::Enter
-</span><span class="boring">    }
-</span><span class="boring">}
-</span>
+impl GeneratorA {
+    fn start() -&gt; Self {
+        GeneratorA::Enter
+    }
+}
+
 impl Generator for GeneratorA {
     type Yield = usize;
     type Return = ();
@@ -415,21 +391,17 @@ impl Generator for GeneratorA {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
-<p>If you try to compile this you'll get an error (just try it yourself by pressing play).</p>
-<p>What is the lifetime of <code>&amp;String</code>. It's not the same as the lifetime of <code>Self</code>. It's not <code>static</code>.
-Turns out that it's not possible for us in Rusts syntax to describe this lifetime, which means, that
-to make this work, we'll have to let the compiler know that <em>we</em> control this correctly ourselves.</p>
-<p>That means turning to unsafe.</p>
-<p>Let's try to write an implementation that will compiler using <code>unsafe</code>. As you'll
-see we end up in a <em>self referential struct</em>. A struct which holds references
-into itself.</p>
-<p>As you'll notice, this compiles just fine!</p>
+}
+</code></pre></pre>
+<p>如果你试图编译这个，你会得到一个错误。</p>
+<p>字符串的生命周期是什么。 这和Self的生命周期是不一样的。 它不是静态的。 事实证明，我们不可能用Rusts语法来描述这个生命周期，这意味着，为了使这个工作成功，我们必须让编译器知道，我们自己正确地控制了它。</p>
+<p>这意味着必须借助unsafe。</p>
+<p>让我们尝试编写一个使用unsafe的实现。 正如您将看到的，我们最终将使用一个自引用结构, 也就是将引用保存在自身中的结构体。</p>
+<p>正如您所注意到的，这个编译器编译得很好！</p>
 <pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>enum GeneratorState&lt;Y, R&gt; {
+ #![allow(unused_variables)]
+fn main() {
+enum GeneratorState&lt;Y, R&gt; {
     Yielded(Y),  
     Complete(R), 
 }
@@ -483,18 +455,21 @@ impl Generator for GeneratorA {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
-<p>Remember that our example is the generator we crated which looked like this:</p>
-<pre><code class="language-rust noplaypen ignore">let mut gen = move || {
+}
+</code></pre></pre>
+<p>请记住，我们的例子是我们生成的生成器，它的原始文件像这样:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let mut gen = move || {
         let to_borrow = String::from(&quot;Hello&quot;);
         let borrowed = &amp;to_borrow;
         yield borrowed.len();
         println!(&quot;{} world!&quot;, borrowed);
     };
-</code></pre>
-<p>Below is an example of how we could run this state-machine and as you see it
-does what we'd expect. But there is still one huge problem with this:</p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>下面是我们如何运行这个状态机的示例，正如您所看到的，它完成了我们所期望的任务。 但这仍然存在一个巨大的问题:</p>
 <pre><pre class="playpen"><code class="language-rust">pub fn main() {
     let mut gen = GeneratorA::start();
     let mut gen2 = GeneratorA::start();
@@ -511,66 +486,65 @@ does what we'd expect. But there is still one huge problem with this:</p>
         ()
     };
 }
-<span class="boring">enum GeneratorState&lt;Y, R&gt; {
-</span><span class="boring">    Yielded(Y),  
-</span><span class="boring">    Complete(R), 
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">trait Generator {
-</span><span class="boring">    type Yield;
-</span><span class="boring">    type Return;
-</span><span class="boring">    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt;;
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">enum GeneratorA {
-</span><span class="boring">    Enter,
-</span><span class="boring">    Yield1 {
-</span><span class="boring">        to_borrow: String,
-</span><span class="boring">        borrowed: *const String,
-</span><span class="boring">    },
-</span><span class="boring">    Exit,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl GeneratorA {
-</span><span class="boring">    fn start() -&gt; Self {
-</span><span class="boring">        GeneratorA::Enter
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">impl Generator for GeneratorA {
-</span><span class="boring">    type Yield = usize;
-</span><span class="boring">    type Return = ();
-</span><span class="boring">    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt; {
-</span><span class="boring">            match self {
-</span><span class="boring">            GeneratorA::Enter =&gt; {
-</span><span class="boring">                let to_borrow = String::from(&quot;Hello&quot;);
-</span><span class="boring">                let borrowed = &amp;to_borrow;
-</span><span class="boring">                let res = borrowed.len();
-</span><span class="boring">                *self = GeneratorA::Yield1 {to_borrow, borrowed: std::ptr::null()};
-</span><span class="boring">                
-</span><span class="boring">                // We set the self-reference here
-</span><span class="boring">                if let GeneratorA::Yield1 {to_borrow, borrowed} = self {
-</span><span class="boring">                    *borrowed = to_borrow;
-</span><span class="boring">                }
-</span><span class="boring">               
-</span><span class="boring">                GeneratorState::Yielded(res)
-</span><span class="boring">            }
-</span><span class="boring">
-</span><span class="boring">            GeneratorA::Yield1 {borrowed, ..} =&gt; {
-</span><span class="boring">                let borrowed: &amp;String = unsafe {&amp;**borrowed};
-</span><span class="boring">                println!(&quot;{} world&quot;, borrowed);
-</span><span class="boring">                *self = GeneratorA::Exit;
-</span><span class="boring">                GeneratorState::Complete(())
-</span><span class="boring">            }
-</span><span class="boring">            GeneratorA::Exit =&gt; panic!(&quot;Can't advance an exited generator!&quot;),
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>The problem is that in safe Rust we can still do this:</p>
-<p><em>Run the code and compare the results. Do you see the problem?</em></p>
-<pre><pre class="playpen"><code class="language-rust should_panic"><span class="boring">#![feature(never_type)] // Force nightly compiler to be used in playground
-</span><span class="boring">// by betting on it's true that this type is named after it's stabilization date...
-</span>pub fn main() {
+enum GeneratorState&lt;Y, R&gt; {
+    Yielded(Y),  
+    Complete(R), 
+}
+
+trait Generator {
+    type Yield;
+    type Return;
+    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt;;
+}
+
+enum GeneratorA {
+    Enter,
+    Yield1 {
+        to_borrow: String,
+        borrowed: *const String,
+    },
+    Exit,
+}
+
+impl GeneratorA {
+    fn start() -&gt; Self {
+        GeneratorA::Enter
+    }
+}
+impl Generator for GeneratorA {
+    type Yield = usize;
+    type Return = ();
+    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt; {
+            match self {
+            GeneratorA::Enter =&gt; {
+                let to_borrow = String::from(&quot;Hello&quot;);
+                let borrowed = &amp;to_borrow;
+                let res = borrowed.len();
+                *self = GeneratorA::Yield1 {to_borrow, borrowed: std::ptr::null()};
+                
+                // We set the self-reference here
+                if let GeneratorA::Yield1 {to_borrow, borrowed} = self {
+                    *borrowed = to_borrow;
+                }
+               
+                GeneratorState::Yielded(res)
+            }
+
+            GeneratorA::Yield1 {borrowed, ..} =&gt; {
+                let borrowed: &amp;String = unsafe {&amp;**borrowed};
+                println!(&quot;{} world&quot;, borrowed);
+                *self = GeneratorA::Exit;
+                GeneratorState::Complete(())
+            }
+            GeneratorA::Exit =&gt; panic!(&quot;Can't advance an exited generator!&quot;),
+        }
+    }
+}
+</code></pre></pre>
+<p>问题在于，如果在Safe Rust代码中,我们这样做:</p>
+<pre><pre class="playpen"><code class="language-rust"> #![feature(never_type)] // Force nightly compiler to be used in playground
+// by betting on it's true that this type is named after it's stabilization date...
+pub fn main() {
     let mut gen = GeneratorA::start();
     let mut gen2 = GeneratorA::start();
 
@@ -589,119 +563,107 @@ does what we'd expect. But there is still one huge problem with this:</p>
         ()
     };
 }
-<span class="boring">enum GeneratorState&lt;Y, R&gt; {
-</span><span class="boring">    Yielded(Y),  
-</span><span class="boring">    Complete(R), 
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">trait Generator {
-</span><span class="boring">    type Yield;
-</span><span class="boring">    type Return;
-</span><span class="boring">    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt;;
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">enum GeneratorA {
-</span><span class="boring">    Enter,
-</span><span class="boring">    Yield1 {
-</span><span class="boring">        to_borrow: String,
-</span><span class="boring">        borrowed: *const String,
-</span><span class="boring">    },
-</span><span class="boring">    Exit,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl GeneratorA {
-</span><span class="boring">    fn start() -&gt; Self {
-</span><span class="boring">        GeneratorA::Enter
-</span><span class="boring">    }
-</span><span class="boring">}
-</span><span class="boring">impl Generator for GeneratorA {
-</span><span class="boring">    type Yield = usize;
-</span><span class="boring">    type Return = ();
-</span><span class="boring">    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt; {
-</span><span class="boring">            match self {
-</span><span class="boring">            GeneratorA::Enter =&gt; {
-</span><span class="boring">                let to_borrow = String::from(&quot;Hello&quot;);
-</span><span class="boring">                let borrowed = &amp;to_borrow;
-</span><span class="boring">                let res = borrowed.len();
-</span><span class="boring">                *self = GeneratorA::Yield1 {to_borrow, borrowed: std::ptr::null()};
-</span><span class="boring">                
-</span><span class="boring">                // We set the self-reference here
-</span><span class="boring">                if let GeneratorA::Yield1 {to_borrow, borrowed} = self {
-</span><span class="boring">                    *borrowed = to_borrow;
-</span><span class="boring">                }
-</span><span class="boring">               
-</span><span class="boring">                GeneratorState::Yielded(res)
-</span><span class="boring">            }
-</span><span class="boring">
-</span><span class="boring">            GeneratorA::Yield1 {borrowed, ..} =&gt; {
-</span><span class="boring">                let borrowed: &amp;String = unsafe {&amp;**borrowed};
-</span><span class="boring">                println!(&quot;{} world&quot;, borrowed);
-</span><span class="boring">                *self = GeneratorA::Exit;
-</span><span class="boring">                GeneratorState::Complete(())
-</span><span class="boring">            }
-</span><span class="boring">            GeneratorA::Exit =&gt; panic!(&quot;Can't advance an exited generator!&quot;),
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>Wait? What happened to &quot;Hello&quot;? And why did our code segfault?</p>
-<p>Turns out that while the example above compiles just fine, we expose consumers
-of this this API to both possible undefined behavior and other memory errors
-while using just safe Rust. This is a big problem!</p>
-<blockquote>
-<p>I've actually forced the code above to use the nightly version of the compiler.
-If you run <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=5cbe9897c0e23a502afd2740c7e78b98">the example above on the playground</a>,
-you'll see that it runs without panicing on the current stable (1.42.0) but
-panics on the current nightly (1.44.0). Scary!</p>
-</blockquote>
-<p>We'll explain exactly what happened here using a slightly simpler example in the next
-chapter and we'll fix our generator using <code>Pin</code> so don't worry, you'll see exactly
-what goes wrong and see how <code>Pin</code> can help us deal with self-referential types safely in a
-second.</p>
-<p>Before we go and explain the problem in detail, let's finish off this chapter
-by looking at how generators and the async keyword is related.</p>
-<h2><a class="header" href="#async-and-generators" id="async-and-generators">Async and generators</a></h2>
-<p>Futures in Rust are implemented as state machines much the same way Generators
-are state machines.</p>
-<p>You might have noticed the similarites in the syntax used in async blocks and
-the syntax used in generators:</p>
-<pre><code class="language-rust ignore">let mut gen = move || {
+enum GeneratorState&lt;Y, R&gt; {
+    Yielded(Y),  
+    Complete(R), 
+}
+
+trait Generator {
+    type Yield;
+    type Return;
+    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt;;
+}
+
+enum GeneratorA {
+    Enter,
+    Yield1 {
+        to_borrow: String,
+        borrowed: *const String,
+    },
+    Exit,
+}
+
+impl GeneratorA {
+    fn start() -&gt; Self {
+        GeneratorA::Enter
+    }
+}
+impl Generator for GeneratorA {
+    type Yield = usize;
+    type Return = ();
+    fn resume(&amp;mut self) -&gt; GeneratorState&lt;Self::Yield, Self::Return&gt; {
+            match self {
+            GeneratorA::Enter =&gt; {
+                let to_borrow = String::from(&quot;Hello&quot;);
+                let borrowed = &amp;to_borrow;
+                let res = borrowed.len();
+                *self = GeneratorA::Yield1 {to_borrow, borrowed: std::ptr::null()};
+                
+                // We set the self-reference here
+                if let GeneratorA::Yield1 {to_borrow, borrowed} = self {
+                    *borrowed = to_borrow;
+                }
+               
+                GeneratorState::Yielded(res)
+            }
+
+            GeneratorA::Yield1 {borrowed, ..} =&gt; {
+                let borrowed: &amp;String = unsafe {&amp;**borrowed};
+                println!(&quot;{} world&quot;, borrowed);
+                *self = GeneratorA::Exit;
+                GeneratorState::Complete(())
+            }
+            GeneratorA::Exit =&gt; panic!(&quot;Can't advance an exited generator!&quot;),
+        }
+    }
+}
+</code></pre></pre>
+<p>运行代码并比较结果。你看到问题了吗？</p>
+<p>等等? “Hello”怎么了? 为什么我们的代码出错了？</p>
+<p>事实证明，虽然上面的例子编译得很好，但是我们在使用安全Rust时将这个API的使用者暴露在可能的内存未定义行为和其他内存错误中。 这是个大问题！</p>
+<p>实际上，我已经强制上面的代码使用编译器的夜间版本。 如果您在playground上运行上面的示例，您将看到它在当前稳定状态(1.42.0)上运行时没有panic，但在当前夜间状态(1.44.0)上panic。 太可怕了！</p>
+<p>我们将在下一章用一个稍微简单一点的例子来解释这里发生了什么，我们将使用 Pin 来修复我们的生成器，所以不用担心，您将看到到底出了什么问题，看看 Pin 如何能够帮助我们在一秒钟内安全地处理自引用类型。</p>
+<p>在我们详细解释这个问题之前，让我们通过了解生成器和 async 关键字之间的关系来结束本章。</p>
+<h3><a class="header" href="#异步和生成器" id="异步和生成器">异步和生成器</a></h3>
+<p>Futures 在Rust中被实现为状态机，就像生成器是状态机一样。</p>
+<p>您可能已经注意到异步块中使用的语法和生成器中使用的语法的相似之处:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let mut gen = move || {
         let to_borrow = String::from(&quot;Hello&quot;);
         let borrowed = &amp;to_borrow;
         yield borrowed.len();
         println!(&quot;{} world!&quot;, borrowed);
     };
-</code></pre>
-<p>Compare that with a similar example using async blocks:</p>
-<pre><code class="language-rust ignore">let mut fut = async {
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>比较一下异步块的类似例子:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let mut fut = async {
         let to_borrow = String::from(&quot;Hello&quot;);
         let borrowed = &amp;to_borrow;
         SomeResource::some_task().await;
         println!(&quot;{} world!&quot;, borrowed);
     };
-</code></pre>
-<p>The difference is that Futures has different states than what a <code>Generator</code> would
-have.</p>
-<p>An async block will return a <code>Future</code> instead of a <code>Generator</code>, however, the way
-a Future works and the way a Generator work internally is similar.</p>
-<p>Instead of calling <code>Generator::resume</code> we call <code>Future::poll</code>, and instead of
-returning <code>Yielded</code> or <code>Complete</code> it returns <code>Pending</code> or <code>Ready</code>. Each <code>await</code>
-point in a future is like a <code>yield</code> point in a generator.</p>
-<p>Do you see how they're connected now?</p>
-<p>Thats why kowing how generators work and the challanges they pose also teaches
-you how futures work and the challenges we need to tackle when working with them.</p>
-<p>The same goes for the challenges of borrowing across yield/await points.</p>
-<h2><a class="header" href="#bonus-section---self-referential-generators-in-rust-today" id="bonus-section---self-referential-generators-in-rust-today">Bonus section - self referential generators in Rust today</a></h2>
-<p>Thanks to <a href="https://github.com/rust-lang/rust/pull/45337/files">PR#45337</a> you can actually run code like the one in our
-example in Rust today using the <code>static</code> keyword on nightly. Try it for
-yourself:</p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>不同之处在于，Futures 的状态与 Generator 的状态不同。</p>
+<p>异步块将返回一个 Future 而不是 Generator，但是 Future 的工作方式和 Generator 的内部工作方式是相似的。</p>
+<p>我们不调用<code>Generator::resume</code>，而是调用 <code>Future::poll</code>，并且不返回 generated 或 Complete，而是返回 Pending 或 Ready。 Future中的每一个await就像生成器中的一个yield。</p>
+<p>你看到他们现在是怎么联系起来的了吗？</p>
+<p>这就是为什么理解了生成器如何工作以及他需要面对的挑战,也就理解了Future如何工作以及它需要面对的挑战。</p>
+<p>跨yield/await的借用就是这样.</p>
+<h3><a class="header" href="#奖励部分-正在使用的自引用生成器" id="奖励部分-正在使用的自引用生成器">奖励部分-正在使用的自引用生成器</a></h3>
+<p>感谢<a href="https://github.com/rust-lang/rust/pull/45337/files"> PR#45337 </a>,你可以在nightly版本中使用static关键字运行上面的例子. 你可以试试:</p>
 <blockquote>
-<p>Beware that the API is changing rapidly. As I was writing this book, generators
-had an API change adding support for a &quot;resume&quot; argument to get passed into the
-generator closure.</p>
-<p>Follow the progress on the <a href="https://github.com/rust-lang/rust/issues/43122">tracking issue #4312</a> for <a href="https://github.com/rust-lang/rfcs/blob/master/text/2033-experimental-coroutines.md">RFC#033</a>.</p>
+<p>要注意的是，API可能会发生改变。 在我撰写本书时，生成器API有一个更改，添加了对“ resume”参数的支持，以便传递到生成器闭包中。
+可以关注<a href="https://github.com/rust-lang/rfcs/blob/master/text/2033-experimental-coroutines.md">RFC#033</a>的相关<a href="https://github.com/rust-lang/rust/issues/43122">问题#4312</a>的进展。</p>
 </blockquote>
-<pre><pre class="playpen"><code class="language-rust">#![feature(generators, generator_trait)]
+<pre><pre class="playpen"><code class="language-rust"> #![feature(generators, generator_trait)]
 use std::ops::{Generator, GeneratorState};
 
 
@@ -759,13 +721,13 @@ pub fn main() {
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="2_waker_context.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="2_waker_context.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="4_pin.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="4_pin.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -773,21 +735,6 @@ pub fn main() {
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3001");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload(true); // force reload from server (not from cache)
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

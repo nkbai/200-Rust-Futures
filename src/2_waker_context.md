@@ -1,57 +1,38 @@
-# Waker and Context
+##  唤醒器和上下文(Waker and Context)
 
-> **Overview:**
->
-> - Understand how the Waker object is constructed
-> - Learn how the runtime know when a leaf-future can resume
-> - Learn the basics of dynamic dispatch and trait objects
->
-> The `Waker` type is described as part of [RFC#2592][rfc2592].
+### 概述
 
-## The Waker
+1. 了解 Waker 对象是如何构造的
+2. 了解运行时如何知道`leaf-future`何时可以恢复
+3. 了解动态分发的基础知识和trait对象
 
-The `Waker` type allows for a loose coupling between the reactor-part and the executor-part of a runtime.
+`Waker`类型在[RFC#2592](https://github.com/rust-lang/rfcs/blob/master/text/2592-futures.md#waking-up)中介绍.
 
-By having a wake up mechanism that is _not_ tied to the thing that executes
-the future, runtime-implementors can come up with interesting new wake-up
-mechanisms. An example of this can be spawning a thread to do some work that
-eventually notifies the future, completely independent of the current runtime.
 
-Without a waker, the executor would be the _only_ way to notify a running
-task, whereas with the waker, we get a loose coupling where it's easy to
-extend the ecosystem with new leaf-level tasks.
+### 唤醒器
 
-> If you want to read more about the reasoning behind the `Waker` type I can
-> recommend [Withoutboats articles series about them](https://boats.gitlab.io/blog/post/wakers-i/).
+`Waker`类型允许在运行时的reactor 部分和执行器部分之间进行松散耦合。
 
-## The Context type
+通过使用不与`Future`执行绑定的唤醒机制，运行时实现者可以提出有趣的新唤醒机制。 例如，可以生成一个线程来执行一些工作，这些工作结束时通知`Future`，这完全独立于当前的运行时。
 
-As the docs state as of now this type only wrapps a `Waker`, but it gives some
-flexibility for future evolutions of the API in Rust. The context can for example hold
-task-local storage and provide space for debugging hooks in later iterations.
+如果没有唤醒程序，执行程序将是通知正在运行的任务的唯一方式，而使用唤醒程序，我们将得到一个松散耦合，其中很容易使用新的`leaf-future`来扩展生态系统。
 
-## Understanding the `Waker`
+> 如果你想了解更多关于 Waker 类型背后的原因，我可以推荐[Withoutboats articles series about them](https://boats.gitlab.io/blog/post/wakers-i/)。
 
-One of the most confusing things we encounter when implementing our own `Futures`
-is how we implement a `Waker` . Creating a `Waker` involves creating a `vtable`
-which allows us to use dynamic dispatch to call methods on a _type erased_ trait
-object we construct our selves.
+### 理解唤醒器
 
->If you want to know more about dynamic dispatch in Rust I can recommend  an 
-article written by Adam Schwalm called [Exploring Dynamic Dispatch in Rust](https://alschwalm.com/blog/static/2017/03/07/exploring-dynamic-dispatch-in-rust/).
+在实现我们自己的`Future`时，我们遇到的最令人困惑的事情之一就是我们如何实现一个唤醒器。 创建一个 Waker 需要创建一个 vtable，这个vtable允许我们使用动态方式调用我们真实的Waker实现.
 
-Let's explain this a bit more in detail.
+> 如果你想知道更多关于Rust中的动态分发，我可以推荐 Adam Schwalm 写的一篇文章 [Exploring Dynamic Dispatch in Rust](https://alschwalm.com/blog/static/2017/03/07/exploring-dynamic-dispatch-in-rust/).
 
-## Fat pointers in Rust
+让我们更详细地解释一下。
 
-To get a better understanding of how we implement the `Waker` in Rust, we need
-to take a step back and talk about some fundamentals. Let's start by taking a
-look at the size of some different pointer types in Rust. 
+### Rust中的胖指针
 
-Run the following code _(You'll have to press "play" to see the output)_:
+为了更好地理解我们如何在 Rust 中实现 Waker，我们需要退后一步并讨论一些基本原理。 让我们首先看看 Rust 中一些不同指针类型的大小。
 
-``` rust
-# use std::mem::size_of;
+运行以下代码:
+```rust
 trait SomeTrait { }
 
 fn main() {
@@ -67,35 +48,27 @@ fn main() {
     println!("[i32;4]:--------{}", size_of::<[i32; 4]>());
 }
 ```
+从运行后的输出中可以看到，引用的大小是不同的。 许多是8字节(在64位系统中是指针大小) ，但有些是16字节。
 
-As you see from the output after running this, the sizes of the references varies.
-Many are 8 bytes (which is a pointer size on 64 bit systems), but some are 16
-bytes.
+16字节大小的指针被称为“胖指针” ，因为它们携带额外的信息。
 
-The 16 byte sized pointers are called "fat pointers" since they carry extra
-information.
 
-**Example `&[i32]` :**
+例如 `&[i32]`:
+- 前8个字节是指向数组中第一个元素的实际指针(或 slice 引用的数组的一部分)
+- 第二个8字节是切片的长度
 
-- The first 8 bytes is the actual pointer to the first element in the array (or part of an array the slice refers to)
-- The second 8 bytes is the length of the slice.
 
-**Example `&dyn SomeTrait`:**
+例如  `&dyn SomeTrait`:
+ 
+这就是我们将要关注的胖指针的类型。`&dyn SomeTrait` 是一个trait的引用，或者 Rust称之为一个trait对象。
 
-This is the type of fat pointer we'll concern ourselves about going forward.
-`&dyn SomeTrait` is a reference to a trait, or what Rust calls a _trait object_.
+指向 trait 对象的指针布局如下:
+- 前8个字节指向trait 对象的data
+- 后八个字节指向trait对象的 vtable
 
-The layout for a pointer to a _trait object_ looks like this:
+这样做的好处是，我们可以引用一个对象，除了它实现了 trait 定义的方法之外，我们对这个对象一无所知。 为了达到这个目的，我们使用动态分发。
 
-- The first 8 bytes points to the `data` for the trait object
-- The second 8 bytes points to the `vtable` for the trait object
-
-The reason for this is to allow us to refer to an object we know nothing about
-except that it implements the methods defined by our trait. To accomplish this
-we use _dynamic dispatch_.
-
-Let's explain this in code instead of words by implementing our own trait
-object from these parts:
+让我们用代码而不是文字来解释这一点，通过这些部分来实现我们自己的 trait 对象:
 
 ```rust
 // A reference to a trait object is a fat pointer: (data_ptr, vtable_ptr)
@@ -106,7 +79,7 @@ trait Test {
 }
 
 // This will represent our home brewn fat pointer to a trait object
-#[repr(C)]
+   #[repr(C)]
 struct FatPointer<'a> {
     /// A reference is a pointer to an instantiated `Data` instance
     data: &'a mut Data,
@@ -158,23 +131,15 @@ fn main() {
 }
 ```
 
-Later on, when we implement our own `Waker` we'll actually set up a `vtable`
-like we do here. The way we create it is slightly different, but now that you know
-how regular trait objects work you will probably recognize what we're doing which
-makes it much less mysterious.
+稍后，当我们实现我们自己的 Waker 时，我们实际上会像这里一样建立一个 vtable。 我们创造它的方式略有不同，但是现在你知道了规则特征对象是如何工作的，你可能会认识到我们在做什么，这使得它不那么神秘。
 
-## Bonus section
+### 奖励部分
 
-You might wonder why the `Waker` was implemented like this and not just as a
-normal trait?
+您可能想知道为什么Waker是这样实现的，而不仅仅是作为一个普通的trait.
 
-The reason is flexibility. Implementing the Waker the way we do here gives a lot
-of flexibility of choosing what memory management scheme to use.
+原因在于灵活性。 以这里的方式实现 Waker，可以很灵活地选择要使用的内存管理方案。
 
-The "normal" way is by using an `Arc` to use reference count keep track of when
-a Waker object can be dropped. However, this is not the only way, you could also
-use purely global functions and state, or any other way you wish.
+“正常”的方法是使用 Arc 来使用引用计数来跟踪 Waker 对象何时可以被删除。 但是，这不是唯一的方法，您还可以使用纯粹的全局函数和状态，或者任何其他您希望的方法。
 
-This leaves a lot of options on the table for runtime implementors.
+这在表中为运行时实现者留下了许多选项。
 
-[rfc2592]:https://github.com/rust-lang/rfcs/blob/master/text/2592-futures.md#waking-up

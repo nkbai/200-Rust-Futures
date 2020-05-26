@@ -1,68 +1,46 @@
-# Futures in Rust
+##  Rust中的Futures
 
-> **Overview:**
->
-> - Get a high level introduction to concurrency in Rust
-> - Know what Rust provides and not when working with async code
-> - Get to know why we need a runtime-library in Rust
-> - Understand the difference between  "leaf-future" and a "non-leaf-future"
-> - Get insight on how to handle CPU intensive tasks
+### 概述
 
-## Futures
+1. Rust中并发性的高级介绍
+2. 了解 Rust 在使用异步代码时能提供什么，不能提供什么
+3. 了解为什么我们需要 Rust 的运行时库
+4. 理解“leaf-future”和“non-leaf-future”的区别
+5. 了解如何处理 CPU 密集型任务
 
-So what is a future?
 
-A future is a representation of some operation which will complete in the
-future.
+### Futures
 
-Async in Rust uses a `Poll` based approach, in which an asynchronous task will
-have three phases.
+什么是`Future`?
+`Future`是一些将在未来完成的操作。
+Rust中的异步实现基于轮询,每个异步任务分成三个阶段:
+1. 轮询阶段(The Poll phase). 一个`Future`被轮询后,会开始执行,直到被阻塞. 我们经常把轮询一个Future这部分称之为执行器(executor)
+2. 等待阶段.  事件源(通常称为reactor)注册等待一个事件发生，并确保当该事件准备好时唤醒相应的`Future`
+3. 唤醒阶段.  事件发生,相应的`Future`被唤醒。 现在轮到执行器(executor),就是第一步中的那个执行器，调度`Future`再次被轮询，并向前走一步，直到它完成或达到一个阻塞点，不能再向前走, 如此往复,直到最终完成.
 
-1. **The Poll phase.** A Future is polled which result in the task progressing until
-a point where it can no longer make progress. We often refer to the part of the
-runtime which polls a Future as an executor.
-2. **The Wait phase.** An event source, most often referred to as a reactor,
-registers that a Future is waiting for an event to happen and makes sure that it
-will wake the Future when that event is ready.
-3. **The Wake phase.** The event happens and the Future is woken up. It's now up
-to the executor which polled the Future in step 1 to schedule the future to be
-polled again and make further progress until it completes or reaches a new point
-where it can't make further progress and the cycle repeats.
+当我们谈论`Future`的时候，我发现在早期区分`non-leaf-future`和`leaf-future`是很有用的，因为实际上它们彼此很不一样。
 
-Now, when we talk about futures I find it useful to make a distinction between
-**non-leaf** futures and **leaf** futures early on because in practice they're
-pretty different from one another.
 
 ### Leaf futures
 
-Runtimes create _leaf futures_ which represents a resource like a socket.
-
-```rust, ignore, noplaypen
+由运行时创建`leaf futures`，它就像套接字一样,代表着一种资源.
+```rust
 // stream is a **leaf-future**
 let mut stream = tokio::net::TcpStream::connect("127.0.0.1:3000");
 ```
+对这些资源的操作，比如套接字上的 Read 操作，将是非阻塞的，并返回一个我们称之为`leaf-future`的Future.之所以称之为`leaf-future`,是因为这是我们实际上正在等待的Future.
 
-Operations on these resources, like a `Read` on a socket, will be non-blocking
-and return a future which we call a leaf future since it's the future which
-we're actually waiting on.
+除非你正在编写一个运行时，否则你不太可能自己实现一个`leaf-future`，但是我们将在本书中详细介绍它们是如何构造的。
 
-It's unlikely that you'll implement a leaf future yourself unless you're writing
-a runtime, but we'll go through how they're constructed in this book as well.
-
-It's also unlikely that you'll pass a leaf-future to a runtime and run it to
-completion alone as you'll understand by reading the next paragraph.
+您也不太可能将 `leaf-future` 传递给运行时，然后单独运行它直到完成，这一点您可以通过阅读下一段来理解。
 
 ### Non-leaf-futures
 
-Non-leaf-futures is the kind of futures we as _users_ of a runtime writes
-ourselves using the `async` keyword to create a **task** which can be run on the
-executor.
+Non-leaf-futures指的是那些我们用`async`关键字创建的Future.
 
-The bulk of an async program will consist of non-leaf-futures, which are a kind
-of pause-able computation. This is an important distinction since these futures represents a _set of operations_. Often, such a task will `await` a leaf future
-as one of many operations to complete the task.
+异步程序的大部分是Non-leaf-futures，这是一种可暂停的计算。 这是一个重要的区别，因为这些`Future`代表一组操作。 通常，这样的任务由`await` 一系列`leaf-future`组成.
 
-```rust, ignore, noplaypen, edition2018
+```rust
 // Non-leaf-future
 let non_leaf = async {
     let mut stream = TcpStream::connect("127.0.0.1:3000").await.unwrap();// <- yield
@@ -73,69 +51,47 @@ let non_leaf = async {
 };
 ```
 
-The key to these tasks is that they're able to yield control to the runtime's
-scheduler and then resume execution again where it left off at a later point.
+这些任务的关键是，它们能够将控制权交给运行时的调度程序，然后在稍后停止的地方继续执行。
+与`leaf-future`相比，这些Future本身并不代表I/O资源。 当我们对这些Future进行轮询时, 有可能会运行一段时间或者因为等待相关资源而让度给调度器,然后等待相关资源ready的时候唤醒自己.
 
-In contrast to leaf futures, these kind of futures does not themselves represent
-an I/O resource. When we poll these futures we either run some code or we yield
-to the scheduler while waiting for some resource to signal us that it's ready so
-we can resume where we left off.
 
-## Runtimes
 
-Languages like C#, JavaScript, Java, GO and many others comes with a runtime
-for handling concurrency. So if you come from one of those languages this will
-seem a bit strange to you.
+### 运行时(Runtimes)
 
-Rust is different from these languages in the sense that Rust doesn't come with
-a runtime for handling concurrency, so you need to use a library which provide
-this for you.
+像 c # ，JavaScript，Java，GO 和许多其他语言都有一个处理并发的运行时。 所以如果你来自这些语言中的一种，这对你来说可能会有点奇怪。
 
-Quite a bit of complexity attributed to `Futures` is actually complexity rooted
-in runtimes. Creating an efficient runtime is hard.
+Rust 与这些语言的不同之处在于 Rust 没有处理并发性的运行时，因此您需要使用一个为您提供此功能的库。
 
-Learning how to use one correctly requires quite a bit of effort as well, but
-you'll see that there are several similarities between these kind of runtimes so
-learning one makes learning the next much easier.
+很多复杂性归因于 Futures 实际上是来源于运行时的复杂性，创建一个有效的运行时是困难的。
+学习如何正确使用一个也需要相当多的努力，但是你会看到这些类型的运行时之间有几个相似之处，所以学习一个可以使学习下一个更容易。
 
-The difference between Rust and other languages is that you have to make an
-active choice when it comes to picking a runtime. Most often, in other languages
-you'll just use the one provided for you.
+Rust 和其他语言的区别在于，在选择运行时时，您必须进行主动选择。大多数情况下，在其他语言中，你只会使用提供给你的那一种。
 
-**An async runtime can be divided into two parts:**
+异步运行时可以分为两部分:
+1. 执行器(The Executor)
+2. reactor (The Reactor)
 
-1. The Executor
-2. The Reactor
+当 Rusts Futures 被设计出来的时候，有一个愿望，那就是将通知`Future`它可以做更多工作的工作与`Future`实际做工作分开。
 
-When Rusts Futures were designed there was a desire to separate the job of
-notifying a `Future` that it can do more work, and actually doing the work
-on the `Future`.
+你可以认为前者是reactor的工作，后者是执行器的工作。 运行时的这两个部分使用 `Waker`进行交互。
 
-You can think of the former as the reactor's job, and the latter as the
-executors job. These two parts of a runtime interacts using the `Waker` type.
+写这篇文章的时候，未来最受欢迎的两个运行时是:
 
-The two most popular runtimes for `Futures` as of writing this is:
+1. [async-std](https://github.com/async-rs/async-std)
+2. [Tokio](https://github.com/tokio-rs/tokio)
 
-- [async-std](https://github.com/async-rs/async-std)
-- [Tokio](https://github.com/tokio-rs/tokio)
+### Rust 的标准库做了什么
 
-### What Rust's standard library takes care of
+1. 一个公共接口，`Future trait`
+2. 一个符合人体工程学的方法创建任务, 可以通过async和await关键字进行暂停和恢复`Future`
+3. `Waker`接口, 可以唤醒暂停的`Future`
 
-1. A common interface representing an operation which will be completed in the
-future through the `Future` trait.
-2. An ergonomic way of creating tasks which can be suspended and resumed through
-the `async` and `await` keywords.
-3. A defined interface wake up a suspended task through the `Waker` type.
+这就是Rust标准库所做的。 正如你所看到的，不包括异步I/O的定义,这些异步任务是如何被创建的,如何运行的。
 
-That's really what Rusts standard library does. As you see there is no definition
-of non-blocking I/O, how these tasks are created or how they're run.
+### I/O密集型 VS CPU密集型任务
 
-## I/O vs CPU intensive tasks
-
-As you know now, what you normally write are called non-leaf futures. Let's
-take a look at this async block using pseudo-rust as example:
-
-```rust, ignore
+正如你们现在所知道的，你们通常所写的是`Non-leaf-futures`。 让我们以 pseudo-rust 为例来看一下这个异步块:
+```rust
 let non_leaf = async {
     let mut stream = TcpStream::connect("127.0.0.1:3000").await.unwrap(); // <-- yield
     
@@ -152,67 +108,43 @@ let non_leaf = async {
     // send the results back
     stream.write(report).await.unwrap(); // <-- yield
 };
+
 ```
 
-Now, as you'll see when we go through how Futures work, the code we write between
-the yield points are run on the same thread as our executor.
+现在，正如您将看到的，当我们介绍 Futures 的工作原理时，两个`yield`之间的代码与我们的执行器在同一个线程上运行。
 
-That means that while our `analyzer` is working on the dataset, the executor
-is busy doing calculations instead of handling new requests.
+这意味着当我们分析器处理数据集时，执行器忙于计算而不是处理新的请求。
 
-Fortunately there are a few ways to handle this, and it's not difficult, but it's
-something you must be aware of:
+幸运的是，有几种方法可以解决这个问题，这并不困难，但是你必须意识到:
+1. 我们可以创建一个新的`leaf future`，它将我们的任务发送到另一个线程，并在任务完成时解析。 我们可以像等待其他Future一样等待这个`leaf-future`。
+2. 运行时可以有某种类型的管理程序来监视不同的任务占用多少时间，并将执行器本身移动到不同的线程，这样即使我们的分析程序任务阻塞了原始的执行程序线程，它也可以继续运行。
+3. 您可以自己创建一个与运行时兼容的`reactor`，以您认为合适的任何方式进行分析，并返回一个可以等待的未来。
 
-1. We could create a new leaf future which sends our task to another thread and
-resolves when the task is finished. We could `await` this leaf-future like any
-other future.
+现在，#1是通常的处理方式，但是一些执行器也实现了#2。 2的问题是，如果你切换运行时，你需要确保它也支持这种监督，否则你最终会阻塞执行者。
 
-2. The runtime could have some kind of supervisor that monitors how much time
-different tasks take, and move the executor itself to a different thread so it can
-continue to run even though our `analyzer` task is blocking the original executor thread.
+方式#3更多的是理论上的重要性，通常您会很乐意将任务发送到多数运行时提供的线程池。
 
-3. You can create a reactor yourself which is compatible with the runtime which
-does the analysis any way you see fit, and returns a Future which can be awaited.
+大多数执行器都可以使用诸如 spawn blocking 之类的方法来完成#1。
 
-Now, #1 is the usual way of handling this, but some executors implement #2 as well.
-The problem with #2 is that if you switch runtime you need to make sure that it
-supports this kind of supervision as well or else you will end up blocking the
-executor.
+这些方法将任务发送到运行时创建的线程池，在该线程池中，您可以执行 cpu 密集型任务，也可以执行运行时不支持的“阻塞”任务。
 
-#3 is more of theoretical importance, normally you'd be happy by sending the task
-to the thread-pool most runtimes provide.
+现在，有了这些知识，你已经在一个很好的方式来理解`Future`，但我们不会停止，有很多细节需要讨论。
 
-Most executors have a way to accomplish #1 using methods like `spawn_blocking`.
+休息一下或喝杯咖啡，准备好我们进入下一章的深度探索。
 
-These methods send the task to a thread-pool created by the runtime where you
-can either perform CPU-intensive tasks or "blocking" tasks which is not supported
-by the runtime.
+### 奖励部分
 
-Now, armed with this knowledge you are already on a good way for understanding
-Futures, but we're not gonna stop yet, there is lots of details to cover. 
 
-Take a break or a cup of coffe and get ready as we go for a deep dive in the next chapters.
+如果你发现并发和异步编程的概念一般来说令人困惑，我知道你是从哪里来的，我已经写了一些资源，试图给出一个高层次的概述，这将使之后更容易学习 Rusts Futures:
 
-## Bonus section
+- [Async Basics - The difference between concurrency and parallelism 异步基础-并发和并行之间的区别](https://cfsamson.github.io/book-exploring-async-basics/1_concurrent_vs_parallel.html)
+- [Async Basics - Async history 异步基础-异步历史](https://cfsamson.github.io/book-exploring-async-basics/2_async_history.html)
+- [Async Basics - Strategies for handling I/O 异步基础-处理 i / o 的策略](https://cfsamson.github.io/book-exploring-async-basics/5_strategies_for_handling_io.html)
+- [Async Basics - Epoll, Kqueue and IOCP 异步基础-Epoll，Kqueue 和 IOCP](https://cfsamson.github.io/book-exploring-async-basics/6_epoll_kqueue_iocp.html)
 
-If you find the concepts of concurrency and async programming confusing in
-general, I know where you're coming from and I have written some resources to 
-try to give a high level overview that will make it easier to learn Rusts 
-`Futures` afterwards:
 
-* [Async Basics - The difference between concurrency and parallelism](https://cfsamson.github.io/book-exploring-async-basics/1_concurrent_vs_parallel.html)
-* [Async Basics - Async history](https://cfsamson.github.io/book-exploring-async-basics/2_async_history.html)
-* [Async Basics - Strategies for handling I/O](https://cfsamson.github.io/book-exploring-async-basics/5_strategies_for_handling_io.html)
-* [Async Basics - Epoll, Kqueue and IOCP](https://cfsamson.github.io/book-exploring-async-basics/6_epoll_kqueue_iocp.html)
+通过研究`Future`来学习这些概念会让它变得比实际需要难得多，所以如果你有点不确定的话，继续读这些章节。
 
-Learning these concepts by studying futures is making it much harder than
-it needs to be, so go on and read these chapters if you feel a bit unsure. 
+你回来的时候我就在这儿。
 
-I'll be right here when you're back.
-
-However, if you feel that you have the basics covered, then let's get moving!
-
-[async_std]: https://github.com/async-rs/async-std
-[tokio]: https://github.com/tokio-rs/tokio
-[compat_info]: https://rust-lang.github.io/futures-rs/blog/2019/04/18/compatibility-layer.html
-[futures_rs]: https://github.com/rust-lang/futures-rs
+如果你觉得你已经掌握了基本知识，那么让我们开始行动吧！

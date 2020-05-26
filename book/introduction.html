@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Futures Explained in 200 Lines of Rust</title>
+        <title>引言 - Futures Explained in 200 Lines of Rust</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -80,8 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> Background information</a></li><li class="expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Futures in Rust</a></li><li class="expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> Waker and Context</a></li><li class="expanded "><a href="3_generators_async_await.html"><strong aria-hidden="true">4.</strong> Generators and async/await</a></li><li class="expanded "><a href="4_pin.html"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="expanded "><a href="6_future_example.html"><strong aria-hidden="true">6.</strong> Implementing Futures</a></li><li class="expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> Finished example (editable)</a></li><li class="expanded affix "><a href="conclusion.html">Conclusion and exercises</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">引言</a></li><li class="chapter-item expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> 背景资料</a></li><li class="chapter-item expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Rust中的Futures</a></li><li class="chapter-item expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> 唤醒器和上下文</a></li><li class="chapter-item expanded "><a href="3_generators_async_await.html"><strong aria-hidden="true">4.</strong> 生成器和async/await</a></li><li class="chapter-item expanded "><a href="4_pin.html"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="chapter-item expanded "><a href="6_future_example.html"><strong aria-hidden="true">6.</strong> 实现Futures--主要例子</a></li><li class="chapter-item expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> 完整的例子</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">结论和练习</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -90,41 +90,40 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
+                    <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -152,58 +151,34 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#futures-explained-in-200-lines-of-rust" id="futures-explained-in-200-lines-of-rust">Futures Explained in 200 Lines of Rust</a></h1>
-<p>This book aims to explain <code>Futures</code> in Rust using an example driven approach,
-exploring why they're designed the way they are, and how they work. We'll also
-take a look at some of the alternatives we have when dealing with concurrency
-in programming.</p>
-<p>Going into the level of detail I do in this book is not needed to use futures
-or async/await in Rust. It's for the curious out there that want to know <em>how</em>
-it all works.</p>
-<h2><a class="header" href="#what-this-book-covers" id="what-this-book-covers">What this book covers</a></h2>
-<p>This book will try to explain everything you might wonder about up until the
-topic of different types of executors and runtimes. We'll just implement a very
-simple runtime in this book introducing some concepts but it's enough to get
-started.</p>
-<p><a href="https://github.com/stjepang">Stjepan Glavina</a> has made an excellent series of
-articles about async runtimes and executors, and if the rumors are right there
-is more to come from him in the near future.</p>
-<p>The way you should go about it is to read this book first, then continue
-reading the <a href="https://stjepang.github.io/">articles from stejpang</a> to learn more
-about runtimes and how they work, especially:</p>
+                        <h2><a class="header" href="#引言" id="引言">引言</a></h2>
+<p>这本书的目的是用一个例子驱动的方法来解释Rust中的Futures，探索为什么他们被设计成这样，以及他们如何工作。 我们还将介绍在编程中处理并发性时的一些替代方案。</p>
+<p>理解这本书中描述的细节， 不需要使用Rust中的 futures或async/await。 这是为那些好奇的人准备的，他们想知道这一切是如何运作的。</p>
+<h3><a class="header" href="#这本书涵盖的内容" id="这本书涵盖的内容">这本书涵盖的内容</a></h3>
+<p>这本书将试图解释你可能想知道的一切，包括不同类型的执行器(executor)和运行时(runtime)的主题。 我们将在本书中实现一个非常简单的运行时，介绍一些概念，但这已经足够开始了。</p>
+<p><a href="https://github.com/stjepang">Stjepan Glavina</a> 发表了一系列关于异步运行时和执行器的优秀文章，如果谣言属实，那么在不久的将来他会发表更多的文章。</p>
+<p>你应该做的是先读这本书，然后继续阅读 <a href="https://stjepang.github.io/">stejpang 的文章</a>，了解更多关于运行时以及它们是如何工作的，特别是:</p>
 <ol>
-<li><a href="https://stjepang.github.io/2020/01/25/build-your-own-block-on.html">Build your own block_on()</a></li>
-<li><a href="https://stjepang.github.io/2020/01/31/build-your-own-executor.html">Build your own executor</a></li>
+<li><a href="https://stjepang.github.io/2020/01/25/build-your-own-block-on.html">构建自的block_on</a></li>
+<li><a href="https://stjepang.github.io/2020/01/31/build-your-own-executor.html">构建自己的executor</a></li>
 </ol>
-<p>I've limited myself to a 200 line main example (hence the title) to limit the
-scope and introduce an example that can easily be explored further.</p>
-<p>However, there is a lot to digest and it's not what I would call easy, but we'll
-take everything step by step so get a cup of tea and relax. </p>
-<p>I hope you enjoy the ride.</p>
+<p>我将自己限制在一个200行的主示例(因此才有了这个标题)中，以限制范围并介绍一个可以轻松进一步研究的示例。</p>
+<p>然而，有很多东西需要消化，这并不像我所说的那么简单，但是我们会一步一步来，所以喝杯茶，放松一下。</p>
 <blockquote>
-<p>This book is developed in the open, and contributions are welcome. You'll find
-<a href="https://github.com/cfsamson/books-futures-explained">the repository for the book itself here</a>. The final example which
-you can clone, fork or copy <a href="https://github.com/cfsamson/examples-futures">can be found here</a>. Any suggestions
-or improvements can be filed as a PR or in the issue tracker for the book.</p>
-<p>As always, all kinds of feedback is welcome.</p>
+<p>这本书是在开放的，并欢迎贡献。 你可以在<a href="https://github.com/cfsamson/books-futures-explained">这里找到这本书</a>。 最后的例子，你可以<a href="https://github.com/cfsamson/examples-futures">克隆或复制</a>可以在这里找到。 任何建议或改进可以归档为一个公关或在问题追踪的书。
+一如既往，我们欢迎各种各样的反馈。</p>
 </blockquote>
-<h2><a class="header" href="#reader-exercises-and-further-reading" id="reader-exercises-and-further-reading">Reader exercises and further reading</a></h2>
-<p>In the last <a href="conclusion.html">chapter</a> I've taken the liberty to suggest some
-small exercises if you want to explore a little further.</p>
-<p>This book is also the fourth book I have written about concurrent programming
-in Rust. If you like it, you might want to check out the others as well:</p>
+<h3><a class="header" href="#阅读练习和进一步阅读" id="阅读练习和进一步阅读">阅读练习和进一步阅读</a></h3>
+<p>在<a href="#%E7%BB%93%E8%AE%BA%E5%92%8C%E7%BB%83%E4%B9%A0">最后一章</a>)中，我冒昧地提出了一些小练习，如果你想进一步探索的话。</p>
+<p>这本书也是我在 Rust 中写的关于并发编程的第四本书。 如果你喜欢它，你可能也想看看其他的:</p>
 <ul>
 <li><a href="https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/">Green Threads Explained in 200 lines of rust</a></li>
-<li><a href="https://cfsamson.github.io/book-exploring-async-basics/">The Node Experiment - Exploring Async Basics with Rust</a></li>
-<li><a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/">Epoll, Kqueue and IOCP Explained with Rust</a></li>
+<li><a href="https://cfsamson.github.io/book-exploring-async-basics/">The Node Experiment - Exploring Async Basics with Rust 节点实验——用Rust探索异步基础</a></li>
+<li><a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/">Epoll, Kqueue and IOCP Explained with Rust 用 Rust 解释 Epoll，Kqueue 和 IOCP</a></li>
 </ul>
-<h2><a class="header" href="#credits-and-thanks" id="credits-and-thanks">Credits and thanks</a></h2>
-<p>I'd like to take this chance to thank the people behind <code>mio</code>, <code>tokio</code>,
-<code>async_std</code>, <code>Futures</code>, <code>libc</code>, <code>crossbeam</code> which underpins so much of the
-async ecosystem and rarely gets enough praise in my eyes.</p>
-<p>A special thanks to <a href="https://twitter.com/jonhoo">jonhoo</a> who was kind enough to
-give me some valuable feedback on a very early draft of this book. He has not
-read the finished product, but a big thanks is definitely due.</p>
+<h3><a class="header" href="#感谢" id="感谢">感谢</a></h3>
+<p>我想借此机会感谢 mio，tokio，async std，Futures，libc，crossbeam 背后的人们，他们支撑着这个异步生态系统，却很少在我眼中得到足够的赞扬。</p>
+<p>特别感谢 jonhoo，他对我这本书的初稿给予了一些有价值的反馈。 他还没有读完最终的成品，但是我们应该向他表示感谢。</p>
 
                     </main>
 
@@ -226,7 +201,7 @@ read the finished product, but a big thanks is definitely due.</p>
                 
 
                 
-                    <a href="0_background_information.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="0_background_information.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -234,21 +209,6 @@ read the finished product, but a big thanks is definitely due.</p>
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3001");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload(true); // force reload from server (not from cache)
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

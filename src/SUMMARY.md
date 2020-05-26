@@ -1,13 +1,13 @@
 # Summary
 
-[Introduction](./introduction.md)
+[引言](./introduction.md)
 
-- [Background information](./0_background_information.md)
-- [Futures in Rust](./1_futures_in_rust.md)
-- [Waker and Context](./2_waker_context.md)
-- [Generators and async/await](./3_generators_async_await.md)
+- [背景资料](./0_background_information.md)
+- [Rust中的Futures](./1_futures_in_rust.md)
+- [唤醒器和上下文](./2_waker_context.md)
+- [生成器和async/await](./3_generators_async_await.md)
 - [Pin](./4_pin.md)
-- [Implementing Futures](./6_future_example.md)
-- [Finished example (editable)](./8_finished_example.md)
+- [实现Futures--主要例子](./6_future_example.md)
+- [完整的例子](./8_finished_example.md)
 
-[Conclusion and exercises](./conclusion.md)
+[结论和练习](./conclusion.md)

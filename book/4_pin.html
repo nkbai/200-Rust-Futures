@@ -80,8 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> Background information</a></li><li class="expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Futures in Rust</a></li><li class="expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> Waker and Context</a></li><li class="expanded "><a href="3_generators_async_await.html"><strong aria-hidden="true">4.</strong> Generators and async/await</a></li><li class="expanded "><a href="4_pin.html" class="active"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="expanded "><a href="6_future_example.html"><strong aria-hidden="true">6.</strong> Implementing Futures</a></li><li class="expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> Finished example (editable)</a></li><li class="expanded affix "><a href="conclusion.html">Conclusion and exercises</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">引言</a></li><li class="chapter-item expanded "><a href="0_background_information.html"><strong aria-hidden="true">1.</strong> 背景资料</a></li><li class="chapter-item expanded "><a href="1_futures_in_rust.html"><strong aria-hidden="true">2.</strong> Rust中的Futures</a></li><li class="chapter-item expanded "><a href="2_waker_context.html"><strong aria-hidden="true">3.</strong> 唤醒器和上下文</a></li><li class="chapter-item expanded "><a href="3_generators_async_await.html"><strong aria-hidden="true">4.</strong> 生成器和async/await</a></li><li class="chapter-item expanded "><a href="4_pin.html" class="active"><strong aria-hidden="true">5.</strong> Pin</a></li><li class="chapter-item expanded "><a href="6_future_example.html"><strong aria-hidden="true">6.</strong> 实现Futures--主要例子</a></li><li class="chapter-item expanded "><a href="8_finished_example.html"><strong aria-hidden="true">7.</strong> 完整的例子</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">结论和练习</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -90,41 +90,40 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
+                    <h1 class="menu-title">Futures Explained in 200 Lines of Rust</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/cfsamson/books-futures-explained" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -152,50 +151,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#pin" id="pin">Pin</a></h1>
+                        <h2><a class="header" href="#pin" id="pin">Pin</a></h2>
+<h3><a class="header" href="#概述" id="概述">概述</a></h3>
 <blockquote>
-<p><strong>Overview</strong></p>
+<p>译者注: Pin是在使用Future时一个非常重要的概念,我的理解是: 通过使用Pin,让用户无法安全的获取到<code>&amp;mut T</code>,进而无法进行上述例子中的swap. 如果你觉得你的和这个struct没有自引用的问题,你可以自己实现UnPin. </p>
+</blockquote>
 <ol>
-<li>Learn how to use <code>Pin</code> and why it's required when implementing your own <code>Future</code></li>
-<li>Understand how to make self-referential types safe to use in Rust</li>
-<li>Learn how borrowing across <code>await</code> points is accomplished</li>
-<li>Get a set of practical rules to help you work with <code>Pin</code></li>
+<li>了解如何使用Pin以及当你自己实现<code>Future</code>的时候为什么需要Pin</li>
+<li>理解如何让自引用类型被安全的使用</li>
+<li>理解跨'await`借用是如何实现的</li>
+<li>制定一套实用的规则来帮助你使用Pin</li>
 </ol>
-<p><code>Pin</code> was suggested in <a href="https://github.com/rust-lang/rfcs/blob/master/text/2349-pin.md">RFC#2349</a></p>
-</blockquote>
-<p>Let's jump strait to it. Pinning is one of those subjects which is hard to wrap
-your head around in the start, but once you unlock a mental model for it
-it gets significantly easier to reason about.</p>
-<h2><a class="header" href="#definitions" id="definitions">Definitions</a></h2>
-<p>Pin is only relevant for pointers. A reference to an object is a pointer.</p>
-<p>Pin consists of the <code>Pin</code> type and the <code>Unpin</code> marker. Pin's purpose in life is
-to govern the rules that need to apply for types which implement <code>!Unpin</code>.</p>
-<p>Yep, you're right, that's double negation right there. <code>!Unpin</code> means
-&quot;not-un-pin&quot;.</p>
+<p>Pin是在<a href="https://github.com/rust-lang/rfcs/blob/master/text/2349-pin.md">RFC#2349</a>中被提出的.</p>
+<p>让我们直接了当的说吧,Pin是这一系列概念中很难一开始就搞明白的,但是一旦你理解了其心智模型,就会觉得非常容易理解.</p>
+<h3><a class="header" href="#定义" id="定义">定义</a></h3>
+<p>Pin只与指针有关,在Rust中引用也是指针.</p>
+<p>Pin有<code>Pin</code>类型和<code>Unpin</code>标记组成(UnPin是Rust中为数不多的几个auto trait). Pin存在的目的就是为了让那些实现了<code>!UnPin</code>的类型遵守特定的规则.</p>
+<p>是的，你是对的，这里是双重否定<code>!Unpin</code> 的意思是“not-un-pin”。</p>
 <blockquote>
-<p><em>This naming scheme is one of Rusts safety features where it deliberately
-tests if you're too tired to safely implement a type with this marker. If
-you're starting to get confused, or even angry, by <code>!Unpin</code> it's a good sign
-that it's time to lay down the work and start over tomorrow with a fresh mind.</em></p>
+<p>这个命名方案是 Rusts 的安全特性之一，它故意测试您是否因为太累而无法安全地使用这个标记来实现类型。 如果你因为<code>UnPin</code>开始感到困惑，或者甚至生气，那么你就应该这样做！ 是时候放下工作，以全新的心态重新开始明天的生活了，这是一个好兆头。</p>
 </blockquote>
-<p>On a more serious note, I feel obliged to mention that there are valid reasons
-for the names that were chosen. Naming is not easy, and I considered renaming
-<code>Unpin</code> and <code>!Unpin</code> in this book to make them easier to reason about. </p>
-<p>However, an experienced member of the Rust community convinced me that that there
-is just too many nuances and edge-cases to consider which is easily overlooked when
-naively giving these markers different names, and I'm convinced that we'll
-just have to get used to them and use them as is.</p>
-<p>If you want to you can read a bit of the discussion from the
-<a href="https://internals.rust-lang.org/t/naming-pin-anchor-move/6864/12">internals thread</a>.</p>
-<h2><a class="header" href="#pinning-and-self-referential-structs" id="pinning-and-self-referential-structs">Pinning and self-referential structs</a></h2>
-<p>Let's start where we left off in the last chapter by making the problem we
-saw using a self-referential struct in our generator a lot simpler by making
-some self-referential structs that are easier to reason about than our
-state machines:</p>
-<p>For now our example will look like this:</p>
-<pre><code class="language-rust ignore">use std::pin::Pin;
+<p>更严肃地说，我认为有必要提到，选择这些名字是有正当理由的。 命名并不容易，我曾经考虑过在这本书中重命名 <code>Unpin</code> 和<code>!UnPin</code> ,使他们更容易理解。</p>
+<p>然而，一位经验丰富的Rust社区成员让我相信，当简单地给这些标记起不同的名字时，有太多的细微差别和边缘情况需要考虑，而这些很容易被忽略，我相信我们将不得不习惯它们并按原样使用它们。</p>
+<p>如果你愿意，你可以从<a href="https://internals.rust-lang.org/t/naming-pin-anchor-move/6864">内部讨论</a>中读到一些讨论。</p>
+<h3><a class="header" href="#pinning和自引用结构" id="pinning和自引用结构">Pinning和自引用结构</a></h3>
+<p>让我们从上一章(生成器那一章)停止的地方开始，通过使用一些比状态机更容易推理的自引用结构，使我们在生成器中看到的使用自引用结构的问题变得简单得多:</p>
+<p>现在我们的例子是这样的:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use std::pin::Pin;
 
-#[derive(Debug)]
+  #[derive(Debug)]
 struct Test {
     a: String,
     b: *const String,
@@ -223,16 +210,12 @@ impl Test {
         unsafe {&amp;*(self.b)}
     }
 }
-</code></pre>
-<p>Let's walk through this example since we'll be using it the rest of this chapter.</p>
-<p>We have a self-referential struct <code>Test</code>. <code>Test</code> needs an <code>init</code> method to be
-created which is strange but we'll need that to keep this example as short as
-possible.</p>
-<p><code>Test</code> provides two methods to get a reference to the value of the fields
-<code>a</code> and <code>b</code>. Since <code>b</code> is a reference to <code>a</code> we store it as a pointer since
-the borrowing rules of Rust doesn't allow us to define this lifetime.</p>
-<p>Now, let's use this example to explain the problem we encounter in detail. As
-you see, this works as expected:</p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>让我们来回顾一下这个例子，因为我们将在本章的其余部分使用它。</p>
+<p>我们有一个自引用结构体<code>Test</code>。 Test需要创建一个init方法，这个方法很奇怪，但是为了尽可能简短，我们需要这个方法。</p>
+<p>Test 提供了两种方法来获取字段 a 和 b 值的引用。 因为 b 是 a 的参考，所以我们把它存储为一个指针，因为 Rust 的借用规则不允许我们定义这个生命周期。</p>
+<p>现在，让我们用这个例子来详细解释我们遇到的问题:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let mut test1 = Test::new(&quot;test1&quot;);
     test1.init();
@@ -243,45 +226,12 @@ you see, this works as expected:</p>
     println!(&quot;a: {}, b: {}&quot;, test2.a(), test2.b());
 
 }
-<span class="boring">use std::pin::Pin;
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">struct Test {
-</span><span class="boring">    a: String,
-</span><span class="boring">    b: *const String,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Test {
-</span><span class="boring">    fn new(txt: &amp;str) -&gt; Self {
-</span><span class="boring">        let a = String::from(txt);
-</span><span class="boring">        Test {
-</span><span class="boring">            a,
-</span><span class="boring">            b: std::ptr::null(),
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    // We need an `init` method to actually set our self-reference
-</span><span class="boring">    fn init(&amp;mut self) {
-</span><span class="boring">        let self_ref: *const String = &amp;self.a;
-</span><span class="boring">        self.b = self_ref;
-</span><span class="boring">    }
-</span><span class="boring">    
-</span><span class="boring">    fn a(&amp;self) -&gt; &amp;str {
-</span><span class="boring">        &amp;self.a
-</span><span class="boring">    } 
-</span><span class="boring">    
-</span><span class="boring">    fn b(&amp;self) -&gt; &amp;String {
-</span><span class="boring">        unsafe {&amp;*(self.b)}
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>In our main method we first instantiate two instances of <code>Test</code> and print out
-the value of the fields on <code>test1</code>. We get what we'd expect:</p>
-<pre><code class="language-rust ignore">a: test1, b: test1
+</code></pre></pre>
+<p>在main函数中,我们首先实例化Test的两个实例,然后输出test1和test2各字段的值,结果如我们所料:</p>
+<pre><code>a: test1, b: test1
 a: test2, b: test2
 </code></pre>
-<p>Let's see what happens if we swap the data stored at the memory location
-which <code>test1</code> is pointing to with the data stored at the memory location
-<code>test2</code> is pointing to and vice a versa.</p>
+<p>让我们看看，如果我们将存储在 test1指向的内存位置的数据与存储在 test2指向的内存位置的数据进行交换，会发生什么情况，反之亦然。</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let mut test1 = Test::new(&quot;test1&quot;);
     test1.init();
@@ -293,50 +243,21 @@ which <code>test1</code> is pointing to with the data stored at the memory locat
     println!(&quot;a: {}, b: {}&quot;, test2.a(), test2.b());
 
 }
-<span class="boring">use std::pin::Pin;
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">struct Test {
-</span><span class="boring">    a: String,
-</span><span class="boring">    b: *const String,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Test {
-</span><span class="boring">    fn new(txt: &amp;str) -&gt; Self {
-</span><span class="boring">        let a = String::from(txt);
-</span><span class="boring">        Test {
-</span><span class="boring">            a,
-</span><span class="boring">            b: std::ptr::null(),
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn init(&amp;mut self) {
-</span><span class="boring">        let self_ref: *const String = &amp;self.a;
-</span><span class="boring">        self.b = self_ref;
-</span><span class="boring">    }
-</span><span class="boring">    
-</span><span class="boring">    fn a(&amp;self) -&gt; &amp;str {
-</span><span class="boring">        &amp;self.a
-</span><span class="boring">    } 
-</span><span class="boring">    
-</span><span class="boring">    fn b(&amp;self) -&gt; &amp;String {
-</span><span class="boring">        unsafe {&amp;*(self.b)}
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>Naively, we could think that what we should get a debug print of <code>test1</code> two
-times like this</p>
-<pre><code class="language-rust ignore">a: test1, b: test1
+</code></pre></pre>
+<p>我们可能会认为会打印两边test1,比如:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>a: test1, b: test1
 a: test1, b: test1
-</code></pre>
-<p>But instead we get:</p>
-<pre><code class="language-rust ignore">a: test1, b: test1
+<span class="boring">}
+</span></code></pre></pre>
+<p>但是实际上我们得到的是:</p>
+<pre><code>a: test1, b: test1
 a: test1, b: test2
 </code></pre>
-<p>The pointer to <code>test2.b</code> still points to the old location which is inside <code>test1</code>
-now. The struct is not self-referential anymore, it holds a pointer to a field
-in a different object. That means we can't rely on the lifetime of <code>test2.b</code> to
-be tied to the lifetime of <code>test2</code> anymore.</p>
-<p>If your still not convinced, this should at least convince you:</p>
+<p>指向 test2.b 的指针仍然指向test1内部的旧位置。 该结构不再是自引用的，它保存指向不同对象中的字段的指针。 这意味着我们不能再依赖test2.b的生存期与test2的生存期绑定在一起。</p>
+<p>如果你仍然不相信，这至少可以说服你:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let mut test1 = Test::new(&quot;test1&quot;);
     test1.init();
@@ -349,50 +270,21 @@ be tied to the lifetime of <code>test2</code> anymore.</p>
     println!(&quot;a: {}, b: {}&quot;, test2.a(), test2.b());
 
 }
-<span class="boring">use std::pin::Pin;
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">struct Test {
-</span><span class="boring">    a: String,
-</span><span class="boring">    b: *const String,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">impl Test {
-</span><span class="boring">    fn new(txt: &amp;str) -&gt; Self {
-</span><span class="boring">        let a = String::from(txt);
-</span><span class="boring">        Test {
-</span><span class="boring">            a,
-</span><span class="boring">            b: std::ptr::null(),
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn init(&amp;mut self) {
-</span><span class="boring">        let self_ref: *const String = &amp;self.a;
-</span><span class="boring">        self.b = self_ref;
-</span><span class="boring">    }
-</span><span class="boring">    
-</span><span class="boring">    fn a(&amp;self) -&gt; &amp;str {
-</span><span class="boring">        &amp;self.a
-</span><span class="boring">    } 
-</span><span class="boring">    
-</span><span class="boring">    fn b(&amp;self) -&gt; &amp;String {
-</span><span class="boring">        unsafe {&amp;*(self.b)}
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>That shouldn't happen. There is no serious error yet, but as you can imagine
-it's easy to create serious bugs using this code.</p>
-<p>I created a diagram to help visualize what's going on:</p>
-<p><strong>Fig 1: Before and after swap</strong>
-<img src="./assets/swap_problem.jpg" alt="swap_problem" /></p>
-<p>As you can see this results in unwanted behavior. It's easy to get this to 
-segfault, show UB and fail in other spectacular ways as well.</p>
-<h2><a class="header" href="#pinning-to-the-stack" id="pinning-to-the-stack">Pinning to the stack</a></h2>
-<p>Now, we can solve this problem by using <code>Pin</code> instead. Let's take a look at what
-our example would look like then:</p>
-<pre><code class="language-rust ignore">use std::pin::Pin;
+</code></pre></pre>
+<p>这是不应该发生的。 目前还没有严重的错误，但是您可以想象，使用这些代码很容易创建严重的错误。</p>
+<p>我创建了一个图表来帮助可视化正在发生的事情:</p>
+<p><img src="swap_problem.jpg" alt="" />
+图1: 交换前后</p>
+<p>正如你看到的,这不是我们想要的结果. 这很容易导致段错误,也很容易导致其他意想不到的未知行为以及失败.</p>
+<h3><a class="header" href="#固定在栈上" id="固定在栈上">固定在栈上</a></h3>
+<p>现在，我们可以通过使用<code>Pin</code>来解决这个问题。 让我们来看看我们的例子是什么样的:</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use std::pin::Pin;
 use std::marker::PhantomPinned;
 
-#[derive(Debug)]
+ #[derive(Debug)]
 struct Test {
     a: String,
     b: *const String,
@@ -424,13 +316,11 @@ impl Test {
         unsafe { &amp;*(self.b) }
     }
 }
-</code></pre>
-<p>Now, what we've done here is pinning a stack address. That will always be
-<code>unsafe</code> if our type implements <code>!Unpin</code>.</p>
-<p>We use the same tricks here, including requiring an <code>init</code>. If we want to fix that
-and let users avoid <code>unsafe</code> we need to pin our data on the heap instead which
-we'll show in a second.</p>
-<p>Let's see what happens if we run our example now:</p>
+<span class="boring">}
+</span></code></pre></pre>
+<p>现在，我们在这里所做的就是固定到一个栈地址。如果我们的类型实现了<code>!UnPin</code>，那么它将总是<code>unsafe</code>。</p>
+<p>我们在这里使用相同的技巧，包括需要 init。 如果我们想要解决这个问题并让用户避免<code>unsafe</code>，我们需要将数据钉在堆上，我们马上就会展示这一点。</p>
+<p>让我们看看如果我们现在运行我们的例子会发生什么:</p>
 <pre><pre class="playpen"><code class="language-rust">pub fn main() {
     // test1 is safe to move before we initialize it
     let mut test1 = Test::new(&quot;test1&quot;);
@@ -445,45 +335,9 @@ we'll show in a second.</p>
     println!(&quot;a: {}, b: {}&quot;, Test::a(test1.as_ref()), Test::b(test1.as_ref()));
     println!(&quot;a: {}, b: {}&quot;, Test::a(test2.as_ref()), Test::b(test2.as_ref()));
 }
-<span class="boring">use std::pin::Pin;
-</span><span class="boring">use std::marker::PhantomPinned;
-</span><span class="boring">
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">struct Test {
-</span><span class="boring">    a: String,
-</span><span class="boring">    b: *const String,
-</span><span class="boring">    _marker: PhantomPinned,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">
-</span><span class="boring">impl Test {
-</span><span class="boring">    fn new(txt: &amp;str) -&gt; Self {
-</span><span class="boring">        let a = String::from(txt);
-</span><span class="boring">        Test {
-</span><span class="boring">            a,
-</span><span class="boring">            b: std::ptr::null(),
-</span><span class="boring">            // This makes our type `!Unpin`
-</span><span class="boring">            _marker: PhantomPinned,
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">    fn init&lt;'a&gt;(self: Pin&lt;&amp;'a mut Self&gt;) {
-</span><span class="boring">        let self_ptr: *const String = &amp;self.a;
-</span><span class="boring">        let this = unsafe { self.get_unchecked_mut() };
-</span><span class="boring">        this.b = self_ptr;
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn a&lt;'a&gt;(self: Pin&lt;&amp;'a Self&gt;) -&gt; &amp;'a str {
-</span><span class="boring">        &amp;self.get_ref().a
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn b&lt;'a&gt;(self: Pin&lt;&amp;'a Self&gt;) -&gt; &amp;'a String {
-</span><span class="boring">        unsafe { &amp;*(self.b) }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>Now, if we try to pull the same trick which got us in to trouble the last time
-you'll get a compilation error.</p>
-<pre><pre class="playpen"><code class="language-rust compile_fail">pub fn main() {
+</code></pre></pre>
+<p>现在，如果我们尝试使用上次使我们陷入麻烦的问题，您将得到一个编译错误。</p>
+<pre><pre class="playpen"><code class="language-rust">pub fn main() {
     let mut test1 = Test::new(&quot;test1&quot;);
     let mut test1 = unsafe { Pin::new_unchecked(&amp;mut test1) };
     Test::init(test1.as_mut());
@@ -496,52 +350,12 @@ you'll get a compilation error.</p>
     std::mem::swap(test1.as_mut(), test2.as_mut());
     println!(&quot;a: {}, b: {}&quot;, Test::a(test2.as_ref()), Test::b(test2.as_ref()));
 }
-<span class="boring">use std::pin::Pin;
-</span><span class="boring">use std::marker::PhantomPinned;
-</span><span class="boring">
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">struct Test {
-</span><span class="boring">    a: String,
-</span><span class="boring">    b: *const String,
-</span><span class="boring">    _marker: PhantomPinned,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">
-</span><span class="boring">impl Test {
-</span><span class="boring">    fn new(txt: &amp;str) -&gt; Self {
-</span><span class="boring">        let a = String::from(txt);
-</span><span class="boring">        Test {
-</span><span class="boring">            a,
-</span><span class="boring">            b: std::ptr::null(),
-</span><span class="boring">            // This makes our type `!Unpin`
-</span><span class="boring">            _marker: PhantomPinned,
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">    fn init&lt;'a&gt;(self: Pin&lt;&amp;'a mut Self&gt;) {
-</span><span class="boring">        let self_ptr: *const String = &amp;self.a;
-</span><span class="boring">        let this = unsafe { self.get_unchecked_mut() };
-</span><span class="boring">        this.b = self_ptr;
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn a&lt;'a&gt;(self: Pin&lt;&amp;'a Self&gt;) -&gt; &amp;'a str {
-</span><span class="boring">        &amp;self.get_ref().a
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn b&lt;'a&gt;(self: Pin&lt;&amp;'a Self&gt;) -&gt; &amp;'a String {
-</span><span class="boring">        unsafe { &amp;*(self.b) }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-<p>As you see from the error you get by running the code the type system prevents
-us from swapping the pinned pointers.</p>
+</code></pre></pre>
+<p>正如您从运行代码所得到的错误中看到的那样，类型系统阻止我们交换固定指针。</p>
 <blockquote>
-<p>It's important to note that stack pinning will always depend on the current
-stack frame we're in, so we can't create a self referential object in one
-stack frame and return it since any pointers we take to &quot;self&quot; is invalidated.</p>
-<p>It also puts a lot of responsibility in your hands if you pin a value to the
-stack. A mistake that is easy to make is, forgetting to shadow the original variable 
-since you could drop the pinned pointer and access the old value
-after it's initialized like this:</p>
+<p>需要注意的是，栈pinning总是依赖于我们所在的当前栈帧，因此我们不能在一个栈帧中创建一个自引用对象并返回它，因为任何指向“self”的指针都是无效的。
+如果你把一个值固定在一个栈上，这也会让你承担很多责任。 一个很容易犯的错误是，忘记对原始变量进行阴影处理，因为这样可以在初始化后drop固定的指针并访问原来的值:</p>
+</blockquote>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
    let mut test1 = Test::new(&quot;test1&quot;);
    let mut test1_pin = unsafe { Pin::new_unchecked(&amp;mut test1) };
@@ -552,52 +366,13 @@ after it's initialized like this:</p>
    mem::swap(&amp;mut test1, &amp;mut test2);
    println!(&quot;Not self referential anymore: {:?}&quot;, test1.b);
 }
-<span class="boring">use std::pin::Pin;
-</span><span class="boring">use std::marker::PhantomPinned;
-</span><span class="boring">use std::mem;
-</span><span class="boring">
-</span><span class="boring">#[derive(Debug)]
-</span><span class="boring">struct Test {
-</span><span class="boring">    a: String,
-</span><span class="boring">    b: *const String,
-</span><span class="boring">    _marker: PhantomPinned,
-</span><span class="boring">}
-</span><span class="boring">
-</span><span class="boring">
-</span><span class="boring">impl Test {
-</span><span class="boring">    fn new(txt: &amp;str) -&gt; Self {
-</span><span class="boring">        let a = String::from(txt);
-</span><span class="boring">        Test {
-</span><span class="boring">            a,
-</span><span class="boring">            b: std::ptr::null(),
-</span><span class="boring">            // This makes our type `!Unpin`
-</span><span class="boring">            _marker: PhantomPinned,
-</span><span class="boring">        }
-</span><span class="boring">    }
-</span><span class="boring">    fn init&lt;'a&gt;(self: Pin&lt;&amp;'a mut Self&gt;) {
-</span><span class="boring">        let self_ptr: *const String = &amp;self.a;
-</span><span class="boring">        let this = unsafe { self.get_unchecked_mut() };
-</span><span class="boring">        this.b = self_ptr;
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn a&lt;'a&gt;(self: Pin&lt;&amp;'a Self&gt;) -&gt; &amp;'a str {
-</span><span class="boring">        &amp;self.get_ref().a
-</span><span class="boring">    }
-</span><span class="boring">
-</span><span class="boring">    fn b&lt;'a&gt;(self: Pin&lt;&amp;'a Self&gt;) -&gt; &amp;'a String {
-</span><span class="boring">        unsafe { &amp;*(self.b) }
-</span><span class="boring">    }
-</span><span class="boring">}
-</span></code></pre></pre>
-</blockquote>
-<h2><a class="header" href="#pinning-to-the-heap" id="pinning-to-the-heap">Pinning to the heap</a></h2>
-<p>For completeness let's remove some unsafe and the need for an <code>init</code> method
-at the cost of a heap allocation. Pinning to the heap is safe so the user
-doesn't need to implement any unsafe code:</p>
+</code></pre></pre>
+<h3><a class="header" href="#固定在堆上" id="固定在堆上">固定在堆上</a></h3>
+<p>为了完整性，让我们删除一些不安全的内容，通过以堆分配为代价来消除<code>init</code>方法。 固定到堆是安全的，这样用户不需要实现任何不安全的代码:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::pin::Pin;
 use std::marker::PhantomPinned;
 
-#[derive(Debug)]
+ #[derive(Debug)]
 struct Test {
     a: String,
     b: *const String,
@@ -636,81 +411,35 @@ pub fn main() {
     println!(&quot;a: {}, b: {}&quot;,test2.as_ref().a(), test2.as_ref().b());
 }
 </code></pre></pre>
-<p>The fact that it's safe to pin a heap allocated value even if it is <code>!Unpin</code>
-makes sense. Once the data is allocated on the heap it will have a stable address.</p>
-<p>There is no need for us as users of the API to take special care and ensure
-that the self-referential pointer stays valid.</p>
-<p>There are ways to safely give some guarantees on stack pinning as well, but right
-now you need to use a crate like <a href="https://docs.rs/pin-project/">pin_project</a> to do that.</p>
-<h2><a class="header" href="#practical-rules-for-pinning" id="practical-rules-for-pinning">Practical rules for Pinning</a></h2>
+<p>事实上就算是<code>!Unpin</code>有意义,固定一个堆分配的值也是安全的。 一旦在堆上分配了数据，它就会有一个稳定的地址。</p>
+<p>作为 API 的用户，我们不需要特别注意并确保自引用指针保持有效。</p>
+<p>也有一些方法能够对固定栈上提供一些安全保证，但是现在我们使用<a href="https://docs.rs/pin-project/">pin_project</a>这个包来实现这一点。</p>
+<h3><a class="header" href="#pinning的一些实用规则" id="pinning的一些实用规则">Pinning的一些实用规则</a></h3>
 <ol>
-<li>
-<p>If <code>T: Unpin</code> (which is the default), then <code>Pin&lt;'a, T&gt;</code> is entirely
-equivalent to <code>&amp;'a mut T</code>. in other words: <code>Unpin</code> means it's OK for this type
-to be moved even when pinned, so <code>Pin</code> will have no effect on such a type.</p>
-</li>
-<li>
-<p>Getting a <code>&amp;mut T</code> to a pinned T requires unsafe if <code>T: !Unpin</code>. In
-other words: requiring a pinned pointer to a type which is <code>!Unpin</code> prevents
-the <em>user</em> of that API from moving that value unless it choses to write <code>unsafe</code>
-code.</p>
-</li>
-<li>
-<p>Pinning does nothing special with memory allocation like putting it into some
-&quot;read only&quot; memory or anything fancy. It only uses the type system to prevent
-certain operations on this value.</p>
-</li>
-<li>
-<p>Most standard library types implement <code>Unpin</code>. The same goes for most
-&quot;normal&quot; types you encounter in Rust. <code>Futures</code> and <code>Generators</code> are two
-exceptions.</p>
-</li>
-<li>
-<p>The main use case for <code>Pin</code> is to allow self referential types, the whole
-justification for stabilizing them was to allow that. There are still corner
-cases in the API which are being explored.</p>
-</li>
-<li>
-<p>The implementation behind objects that are <code>!Unpin</code> is most likely unsafe.
-Moving such a type after it has been pinned can cause the universe to crash. As of the time of writing
-this book, creating and reading fields of a self referential struct still requires <code>unsafe</code>
-(the only way to do it is to create a struct containing raw pointers to itself).</p>
-</li>
-<li>
-<p>You can add a <code>!Unpin</code> bound on a type on nightly with a feature flag, or
-by adding <code>std::marker::PhantomPinned</code> to your type on stable.</p>
-</li>
-<li>
-<p>You can either pin a value to memory on the stack or on the heap.</p>
-</li>
-<li>
-<p>Pinning a <code>!Unpin</code> pointer to the stack requires <code>unsafe</code></p>
-</li>
-<li>
-<p>Pinning a <code>!Unpin</code> pointer to the heap does not require <code>unsafe</code>. There is a shortcut for doing this using <code>Box::pin</code>.</p>
-</li>
+<li>针对<code>T:UnPin</code>(这是默认值),<code>Pin&lt;'a,T&gt;</code>完全定价与<code>&amp;'a mut T</code>. 换句话说: <code>UnPin</code>意味着这个类型即使在固定时也可以移动，所以Pin对这个类型没有影响。</li>
+<li>针对<code>T:!UnPin</code>,从<code>Pin&lt; T&gt;</code>获取到<code>&amp;mut T</code>,则必须使用unsafe. 换句话说,<code>!Unpin</code>能够阻止API的使用者移动T,除非他写出unsafe的代码.</li>
+<li>Pinning对于内存分配没有什么特别的作用，比如将其放入某个“只读”内存或任何奇特的内存中。 它只使用类型系统来防止对该值进行某些操作。</li>
+<li>大多数标准库类型实现 Unpin。 这同样适用于你在 Rust 中遇到的大多数“正常”类型。 <code>Future</code>和<code>Generators</code>是两个例外。</li>
+<li>Pin的主要用途就是自引用类型,Rust语言的所有这些调整就是为了允许这个. 这个API中仍然有一些问题需要探讨.</li>
+<li><code>!UnPin</code>这些类型的实现很有可能是不安全的. 在这种类型被钉住后移动它可能会导致程序崩溃。 在撰写本书时，创建和读取自引用结构的字段仍然需要不安全的方法(唯一的方法是创建一个包含指向自身的原始指针的结构)。</li>
+<li>当使用nightly版本时,你可以在一个使用特性标记在一个类型上添加<code>!UnPin</code>. 当使用stable版本时,可以将std: : marker: : PhantomPinned 添加到类型上。</li>
+<li>你既可以固定一个栈上的对象也可以固定一个堆上的对象.</li>
+<li>将一个<code>!UnPin</code>的指向栈上的指针固定需要unsafe.</li>
+<li>将一个<code>!UnPin</code>的指向堆上的指针固定,不需要unsafe,可以直接使用<code>Box::Pin</code>.</li>
 </ol>
 <blockquote>
-<p>Unsafe code does not mean it's literally &quot;unsafe&quot;, it only relieves the 
-guarantees you normally get from the compiler. An <code>unsafe</code> implementation can 
-be perfectly safe to do, but you have no safety net.</p>
+<p>不安全的代码并不意味着它真的“unsafe” ，它只是减轻了通常从编译器得到的保证。 一个不安全的实现可能是完全安全的，但是您没有编译器保证的安全网。</p>
 </blockquote>
-<h3><a class="header" href="#projectionstructural-pinning" id="projectionstructural-pinning">Projection/structural pinning</a></h3>
-<p>In short, projection is a programming language term. <code>mystruct.field1</code> is a
-projection. Structural pinning is using <code>Pin</code> on fields. This has several
-caveats and is not something you'll normally see so I refer to the documentation
-for that.</p>
-<h3><a class="header" href="#pin-and-drop" id="pin-and-drop">Pin and Drop</a></h3>
-<p>The <code>Pin</code> guarantee exists from the moment the value is pinned until it's dropped.
-In the <code>Drop</code> implementation you take a mutable reference to <code>self</code>, which means
-extra care must be taken when implementing <code>Drop</code> for pinned types.</p>
-<h2><a class="header" href="#putting-it-all-together" id="putting-it-all-together">Putting it all together</a></h2>
-<p>This is exactly what we'll do when we implement our own <code>Futures</code> stay tuned, 
-we're soon finished.</p>
-<h2><a class="header" href="#bonus-section-fixing-our-self-referential-generator-and-learning-more-about-pin" id="bonus-section-fixing-our-self-referential-generator-and-learning-more-about-pin">Bonus section: Fixing our self-referential generator and learning more about Pin</a></h2>
-<p>But now, let's prevent this problem using <code>Pin</code>. I've commented along the way to
-make it easier to spot and understand the changes we need to make.</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(optin_builtin_traits, negative_impls)] // needed to implement `!Unpin`
+<h3><a class="header" href="#映射结构体的固定" id="映射结构体的固定">映射/结构体的固定</a></h3>
+<p>简而言之，投影是一个编程语言术语。 Mystruct.field1是一个投影。 结构体的固定是在每一个字段上使用Pin。 这里有一些注意事项，您通常不会看到，因此我参考相关文档。</p>
+<h3><a class="header" href="#pin和drop" id="pin和drop">Pin和Drop</a></h3>
+<p>Pin保证从值被固定到被删除的那一刻起一直存在。 而在Drop实现中，您需要一个可变的 self 引用，这意味着在针对固定类型实现 Drop 时必须格外小心。</p>
+<h3><a class="header" href="#把它们放在一起" id="把它们放在一起">把它们放在一起</a></h3>
+<p>当我们实现自己的<code>Futures</code>的时候,这正是我们要做的，我们很快就完成了。</p>
+<h3><a class="header" href="#奖励部分" id="奖励部分">奖励部分</a></h3>
+<p><strong>修复我们实现的自引用生成器以及学习更多的关于Pin的知识.</strong></p>
+<p>但是现在，让我们使用 Pin 来防止这个问题。 我一直在评论，以便更容易地发现和理解我们需要做出的改变。</p>
+<pre><pre class="playpen"><code class="language-rust"> #![feature(optin_builtin_traits, negative_impls)] // needed to implement `!Unpin`
 use std::pin::Pin;
 
 pub fn main() {
@@ -780,7 +509,7 @@ impl GeneratorA {
 // This tells us that the underlying pointer is not safe to move after pinning.
 // In this case, only we as implementors &quot;feel&quot; this, however, if someone is
 // relying on our Pinned pointer this will prevent them from moving it. You need
-// to enable the feature flag `#![feature(optin_builtin_traits)]` and use the
+// to enable the feature flag ` #![feature(optin_builtin_traits)]` and use the
 // nightly compiler to implement `!Unpin`. Normally, you would use
 // `std::marker::PhantomPinned` to indicate that the struct is `!Unpin`.
 impl !Unpin for GeneratorA { }
@@ -820,16 +549,12 @@ impl Generator for GeneratorA {
     }
 }
 </code></pre></pre>
-<p>Now, as you see, the consumer of this API must either:</p>
+<p>现在，正如你所看到的，这个 API 的使用者必须:</p>
 <ol>
-<li>Box the value and thereby allocating it on the heap</li>
-<li>Use <code>unsafe</code> and pin the value to the stack. The user knows that if they move
-the value afterwards it will violate the guarantee they promise to uphold when
-they did their unsafe implementation.</li>
+<li>将值装箱，从而在堆上分配它</li>
+<li>使用<code>unafe</code>然后把值固定到栈上。 用户知道如果他们事后移动了这个值，那么他们在就违反了当他们使用unsafe时候做出的承诺,也就是一直持有.</li>
 </ol>
-<p>Hopefully, after this you'll have an idea of what happens when you use the
-<code>yield</code> or <code>await</code> keywords inside an async function, and why we need <code>Pin</code> if
-we want to be able to safely borrow across <code>yield/await</code> points.</p>
+<p>希望在这之后，你会知道当你在一个异步函数中使用<code>yield</code>或者<code>await</code>关键词时会发生什么，以及如果我们想要安全地跨yield/await借用时。,为什么我们需要<code>Pin</code></p>
 
                     </main>
 
@@ -854,13 +579,13 @@ we want to be able to safely borrow across <code>yield/await</code> points.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="3_generators_async_await.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="3_generators_async_await.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="6_future_example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="6_future_example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -868,21 +593,6 @@ we want to be able to safely borrow across <code>yield/await</code> points.</p>
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3001");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload(true); // force reload from server (not from cache)
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

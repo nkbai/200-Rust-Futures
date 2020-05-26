@@ -1,27 +1,18 @@
-# Implementing Futures - main example
+##  实现Futures--主要例子
 
-We'll create our own `Futures` together with a fake reactor and a simple
-executor which allows you to edit, run an play around with the code right here
-in your browser.
+我们将用一个伪reactor和一个简单的执行器创建我们自己的`Futures`，它允许你在浏览器中编辑和运行代码
 
-I'll walk you through the example, but if you want to check it out closer, you
-can always [clone the repository][example_repo] and play around with the code
-yourself or just copy it from the next chapter.
+我将向您介绍这个示例，但是如果您想更深入的研究它，您可以[克隆存储库](https://github.com/cfsamson/examples-futures)并自己处理代码，或者直接从下一章复制代码。
 
-There are several branches explained in the readme, but two are
-relevant for this chapter. The `main` branch is the example we go through here,
-and the `basic_example_commented` branch is this example with extensive
-comments.
+readme文件中解释了几个分支，其中有两个分支与本章相关。 主分支是我们在这里经过的例子，`basic_example_commented`分支是这个具有大量注释的例子
 
-> If you want to follow along as we go through, initialize a new cargo project
-> by creating a new folder and run `cargo init` inside it. Everything we write
-> here will be in `main.rs`
+> 如果您希望跟随我们的步骤，可以通过创建一个新的文件夹初始化一个新的 cargo 项目，并在其中运行 cargo init。所有的一切都在main.rs文件中.
 
-## Implementing our own Futures
+### 实现我们自己的Futures
 
-Let's start off by getting all our imports right away so you can follow along
+让我们先从引入依赖开始:
 
-```rust, noplaypen, ignore
+```rust
 use std::{
     future::Future, pin::Pin, sync::{mpsc::{channel, Sender}, Arc, Mutex},
     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
@@ -29,24 +20,24 @@ use std::{
 };
 ```
 
-## The Executor
+### 执行器
 
-The executors responsibility is to take one or more futures and run them to completion.
+执行器的责任是获取一个或多个`Future`然后运行他们到完成。
 
-The first thing an `executor` does when it gets a `Future` is polling it.
+执行器拿到`Future`后的第一件事就是轮询它.
 
-**When polled one of three things can happen:**
+轮询后可以发现以下三种情况:
+1. `Future`返回Ready,然后就可以调度其他任何后续操作.
+2. 这个`Future`从未被轮询过,所以传入一个`Waker`,然后将它挂起
+3. 这个`Future`已经被轮询过,但是返回`Pending`
 
-- The future returns `Ready` and we schedule whatever chained operations to run
-- The future hasn't been polled before so we pass it a `Waker` and suspend it
-- The futures has been polled before but is not ready and returns `Pending`
+ 
 
-Rust provides a way for the Reactor and Executor to communicate through the `Waker`. The reactor stores this `Waker` and calls `Waker::wake()` on it once
-a `Future` has resolved and should be polled again.
+Rust通过`Waker`为Reactor和执行器提供了通信方式. reactor存储这个`Waker`,然后在`Future`等待的事件完成的时候调用`Waker: : wake ()`,这样`Future`就会被再次轮询.
 
-**Our Executor will look like this:**
+我们的执行器会是这个样子:
 
-```rust, noplaypen, ignore
+```rust
 // Our executor takes any object which implements the `Future` trait
 fn block_on<F: Future>(mut future: F) -> F::Output {
 
@@ -84,37 +75,26 @@ fn block_on<F: Future>(mut future: F) -> F::Output {
 }
 ```
 
-In all the examples you'll see in this chapter I've chosen to comment the code
-extensively. I find it easier to follow along that way so I'll not repeat myself
-here and focus only on some important aspects that might need further explanation.
 
-Now that you've read so much about `Generators` and `Pin` already this should
-be rather easy to understand. `Future` is a state machine, every `await` point
-is a `yield` point. We could borrow data across `await` points and we meet the
-exact same challenges as we do when borrowing across `yield` points.
+在本章的所有例子中，我都选择了对代码进行广泛的注释。 我发现沿着这条路走会更容易一些，所以我不会在这里重复自己的话，只关注一些可能需要进一步解释的重要方面。
 
-> `Context` is just a wrapper around the `Waker`. At the time of writing this
-book it's nothing more. In the future it might be possible that the `Context`
-object will do more than just wrapping a `Future` so having this extra 
-abstraction gives some flexibility.
+现在你已经阅读了这么多关于生成器和 Pin 的内容，这应该很容易理解。 `Future`是一个状态机，每一个`await`点也是一个`yield`点。 我们可以跨越`await`借用，我们遇到的问题与跨`yield`借用时完全一样。
 
-As explained in the [chapter about generators](./3_generators_pin.md), we use
-`Pin` and the guarantees that give us to allow `Futures` to have self
-references.
 
-## The `Future` implementation
+> `Context`只是 `Waker` 的包装器, 至少在我写这本书的时候，它仅仅是这样。 在未来，`Context`对象可能不仅仅是包装一个`Waker`(译者注,原文是Future,应该有误)，因此这种额外的抽象可以提供一些灵活性。
 
-Futures has a well defined interface, which means they can be used across the
-entire ecosystem. 
+正如在关于生成器的章节中解释的那样，我们使用Pin来保证允许`Future`有自引用。
 
-We can chain these `Futures` so that once a **leaf-future** is
-ready we'll perform a set of operations until either the task is finished or we
-reach yet another **leaf-future** which we'll wait for and yield control to the
-scheduler.
 
-**Our Future implementation looks like this:**
+### 实现Future
+`Future`有一个定义良好的接口，这意味着他们可以用于整个生态系统。
 
-```rust, noplaypen, ignore
+我们可以将这些`Future`连接起来，这样一旦`leaf-future`准备好了，我们就可以执行一系列操作，直到任务完成或者我们到达另一个`leaf-future`，我们将等待并将控制权交给调度程序。
+
+
+我们`Future`的实现是这样的:
+
+```rust
 // This is the definition of our `Waker`. We use a regular thread-handle here.
 // It works but it's not a good solution. It's easy to fix though, I'll explain
 // after this code snippet.
@@ -131,9 +111,8 @@ struct MyWaker {
 #[derive(Clone)]
 pub struct Task {
     id: usize,
-    reactor: Arc<Mutex<Reactor>>,
+    reactor: Arc<Mutex<Box<Reactor>>>,
     data: u64,
-    is_registered: bool,
 }
 
 // These are function definitions we'll use for our waker. Remember the
@@ -165,7 +144,7 @@ const VTABLE: RawWakerVTable = unsafe {
     )
 };
 
-// Instead of implementing this on the `MyWaker` oject in `impl Mywaker...` we
+// Instead of implementing this on the `MyWaker` object in `impl Mywaker...` we
 // just use this pattern instead since it saves us some lines of code.
 fn waker_into_waker(s: *const MyWaker) -> Waker {
     let raw_waker = RawWaker::new(s as *const (), &VTABLE);
@@ -173,136 +152,122 @@ fn waker_into_waker(s: *const MyWaker) -> Waker {
 }
 
 impl Task {
-    fn new(reactor: Arc<Mutex<Reactor>>, data: u64, id: usize) -> Self {
-        Task {
-            id,
-            reactor,
-            data,
-            is_registered: false,
-        }
+    fn new(reactor: Arc<Mutex<Box<Reactor>>>, data: u64, id: usize) -> Self {
+        Task { id, reactor, data }
     }
 }
 
 // This is our `Future` implementation
 impl Future for Task {
-
-    // The output for our kind of `leaf future` is just an `usize`. For other
-    // futures this could be something more interesting like a byte array.
     type Output = usize;
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+
+    // Poll is the what drives the state machine forward and it's the only
+    // method we'll need to call to drive futures to completion.
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+
+        // We need to get access the reactor in our `poll` method so we acquire
+        // a lock on that.
         let mut r = self.reactor.lock().unwrap();
 
-        // we check with the `Reactor` if this future is in its "readylist"
-        // i.e. if it's `Ready`
+        // First we check if the task is marked as ready
         if r.is_ready(self.id) {
 
-            // if it is, we return the data. In this case it's just the ID of
-            // the task since this is just a very simple example.
+            // If it's ready we set its state to `Finished`
+            *r.tasks.get_mut(&self.id).unwrap() = TaskState::Finished;
             Poll::Ready(self.id)
-        } else if self.is_registered {
+        
+        // If it isn't finished we check the map we have stored in our Reactor
+        // over id's we have registered and see if it's there
+        } else if r.tasks.contains_key(&self.id) {
 
-            // If the future is registered alredy, we just return `Pending`
+            // This is important. The docs says that on multiple calls to poll,
+            // only the Waker from the Context passed to the most recent call
+            // should be scheduled to receive a wakeup. That's why we insert
+            // this waker into the map (which will return the old one which will
+            // get dropped) before we return `Pending`.
+            r.tasks.insert(self.id, TaskState::NotReady(cx.waker().clone()));
             Poll::Pending
         } else {
 
-            // If we get here, it must be the first time this `Future` is polled
-            // so we register a task with our `reactor`
+            // If it's not ready, and not in the map it's a new task so we
+            // register that with the Reactor and return `Pending`
             r.register(self.data, cx.waker().clone(), self.id);
-
-            // oh, we have to drop the lock on our `Mutex` here because we can't
-            // have a shared and exclusive borrow at the same time
-            drop(r);
-            self.is_registered = true;
             Poll::Pending
         }
+
+        // Note that we're holding a lock on the `Mutex` which protects the
+        // Reactor all the way until the end of this scope. This means that
+        // even if our task were to complete immidiately, it will not be
+        // able to call `wake` while we're in our `Poll` method.
+
+        // Since we can make this guarantee, it's now the Executors job to
+        // handle this possible race condition where `Wake` is called after
+        // `poll` but before our thread goes to sleep.
     }
 }
 ```
+这大部分都是直截了当的。 令人困惑的部分是我们需要构建 Waker 的奇怪方式，但是由于我们已经从原始部分创建了我们自己的 trait 对象，这看起来很熟悉。 事实上，这更简单。
 
-This is mostly pretty straight forward. The confusing part is the strange way
-we need to construct the `Waker`, but since we've already created our own
-_trait objects_ from raw parts, this looks pretty familiar. Actually, it's
-even a bit easier.
+我们在这里使用一个Arc来传递一个引用计数的MyWaker的借用。 这是相当正常的，并且使得这个操作变得简单和安全。 克隆一个Waker只是增加一个计数。Drop一个Waker只是简单地减少一个计数. 
 
-We use an `Arc` here to pass out a ref-counted borrow of our `MyWaker`. This
-is pretty normal, and makes this easy and safe to work with. Cloning a `Waker`
-is just increasing the refcount in this case.
+在我们这种特定场景下,我们选择不使用`Arc`. 而使用这种更低层次方式实现的Waker才可以允许我们这么做.
 
-Dropping a `Waker` is as easy as decreasing the refcount. Now, in special
-cases we could choose to not use an `Arc`. So this low-level method is there
-to allow such cases. 
+事实上，如果我们只使用 Arc，那么我们就没有理由费尽心思去创建自己的 vtable 和 RawWaker。 我们可以实现一个普通的trait。
 
-Indeed, if we only used `Arc` there is no reason for us to go through all the 
-trouble of creating our own `vtable` and a `RawWaker`. We could just implement
-a normal trait.
+幸运的是，将来在标准库中也可以实现这个功能。 目前[这个特性仍然在实验中](https://rust-lang-nursery.github.io/futures-api-docs/0.3.0-alpha.13/futures/task/trait.ArcWake.html)，但是我猜想在成熟之后，这个特性将会成为标准库的一部分。
 
-Fortunately, in the future this will probably be possible in the standard
-library as well. For now, [this trait lives in the nursery][arc_wake], but my
-guess is that this will be a part of the standard library after som maturing.
-
-We choose to pass in a reference to the whole `Reactor` here. This isn't normal.
-The reactor will often be a global resource which let's us register interests
-without passing around a reference.
-
-> ### Why using thread park/unpark is a bad idea for a library
-> 
-> It could deadlock easily since anyone could get a handle to the `executor thread`
-> and call park/unpark on it.
-> 
-> 1. A future could call `unpark` on the executor thread from a different thread
-> 2. Our `executor` thinks that data is ready and wakes up and polls the future
-> 3. The future is not ready yet when polled, but at that exact same time the 
-> `Reactor` gets an event and calls `wake()` which also unparks our thread.
-> 4. This could happen before we go to sleep again since these processes
-> run in parallel.
-> 5. Our reactor has called `wake` but our thread is still sleeping since it was
-> awake already at that point.
-> 6. We're deadlocked and our program stops working
-
-> There is also the case that our thread could have what's called a
-> `spurious wakeup` ([which can happen unexpectedly][spurious_wakeup]), which
-> could cause the same deadlock if we're unlucky.
-
-There are several better solutions, here are some:
-
-  - [std::sync::CondVar][condvar]
-  - [crossbeam::sync::Parker][crossbeam_parker]
-
-## The Reactor
-
-This is the home stretch, and not strictly `Future` related, but we need one
-to have an example to run.
-
-Since concurrency mostly makes sense when interacting with the outside world (or
-at least some peripheral), we need something to actually abstract over this
-interaction in an asynchronous way.
-
-This is the `Reactors` job. Most often you'll see reactors in Rust use a library
-called [Mio][mio], which provides non blocking APIs and event notification for
-several platforms.
-
-The reactor will typically give you something like a `TcpStream` (or any other
-resource) which you'll use to create an I/O request. What you get in return is a
-`Future`. 
-
->If our reactor did some real I/O work our `Task` in would instead be represent
->a non-blocking `TcpStream` which registers interest with the global `Reactor`.
->Passing around a reference to the Reactor itself is pretty uncommon but I find
->it makes reasoning about what's happening easier.
-
-Our example task is a timer that only spawns a thread and puts it to sleep for
-the number of seconds we specify. The reactor we create here will create a
-**leaf-future** representing each timer. In return the Reactor receives a waker
-which it will call once the task is finished.
-
-To be able to run the code here in the browser there is not much real I/O we
-can do so just pretend that this is actually represents some useful I/O operation
-for the sake of this example.
+我们选择在这里传入一个整个reactor的引用, 这不正常。 reactor通常是一个全局性的资源，让我们注册感兴趣的事而不需要传入一个引用.
 
 
-**Our Reactor will look like this:**
+ 
+>**为什么在一个Lib中使用park/unpark是一个坏主意**
+>
+>他很容易死锁,因为任何人都可以获得执行器所在线程的句柄,然后调用park/unpark.
 
-```rust, noplaypen, ignore
+> 1. 一个future可以在另一个不同的线程上unpark执行器线程
+> 2. 我们的执行器认为数据准备好了,然后醒来去轮询这个`Future`
+> 3. 当被轮询时,这个`Future`还没有准备好,但是恰在此时,`Reactor`收到事件,调用了`Wake()`来unpark我们的线程. 
+> 4. 这可能发生在我们再次睡眠之前,因为这些操作完全是并行的.
+> 5. 我们的reactor已经调用过`wake`,但是我们的线程仍然在睡眠,因为刚刚调用wake的时候,我们的线程是醒着的.
+> 6. 我们发生了死锁,然后我们的程序停止工作.
+
+
+> 有一种情况是，我们的线程可能会出现所谓的虚假唤醒(可能会出乎意料地发生) ，如果我们运气不好，这可能会导致同样的死锁
+ 
+
+有几种更好的方案,比如:
+
+- std::sync::CondVar
+- crossbeam::sync::Parker
+
+### Reactor
+
+这是最后的冲刺阶段，并不完全与`Future`相关，但是我们需要它来让我们的例子运行起来。
+
+由于大多数时候并发只有在与外部世界(或者至少是一些外围设备)进行交互时才有意义，因此我们需要一些东西来抽象这些异步的交互.
+
+这就是reacotor的工作. 大多数时候你看到的reactor都是用[Mio](https://github.com/tokio-rs/mio)这个库. 它早多个平台上提供了非阻塞API和事件通知机制.
+
+reactor通常会提供类似于TcpStream(或任何其他资源)的东西，只不过您用TcpStream来创建I/O请求,而用reactor来创建Future.
+
+ 
+
+我们的示例任务是一个计时器，它只生成一个线程，并将其置于休眠状态，休眠时间为我们指定的秒数。 我们在这里创建的reactor将创建一个表示每个计时器的`leaf-future`。 作为回报，reactor接收到一个唤醒器，一旦任务完成reactor将调用这个唤醒器。
+
+为了能够在浏览器中运行这里的代码，没有太多真正的I/O，我们可以假装这实际上代表了一些有用的I/O操作。
+
+我们的reactor看起来像这样:
+
+```rust
+// This is a "fake" reactor. It does no real I/O, but that also makes our
+// code possible to run in the book and in the playground
+// The different states a task can have in this Reactor
+enum TaskState {
+    Ready,
+    NotReady(Waker),
+    Finished,
+}
+
 // This is a "fake" reactor. It does no real I/O, but that also makes our
 // code possible to run in the book and in the playground
 struct Reactor {
@@ -312,129 +277,134 @@ struct Reactor {
     dispatcher: Sender<Event>,
     handle: Option<JoinHandle<()>>,
 
-    // This is a list of tasks that are ready, which means they should be polled
-    // for data.
-    readylist: Arc<Mutex<Vec<usize>>>,
+    // This is a list of tasks
+    tasks: HashMap<usize, TaskState>,
 }
 
-// We just have two kind of events. An event called `Timeout`
-// and a `Close` event to close down our reactor.
+// This represents the Events we can send to our reactor thread. In this
+// example it's only a Timeout or a Close event.
 #[derive(Debug)]
 enum Event {
     Close,
-    Timeout(Waker, u64, usize),
+    Timeout(u64, usize),
 }
 
 impl Reactor {
-    fn new() -> Self {
-        // The way we register new events with our reactor is using a regular
-        // channel
+
+    // We choose to return an atomic reference counted, mutex protected, heap
+    // allocated `Reactor`. Just to make it easy to explain... No, the reason
+    // we do this is:
+    //
+    // 1. We know that only thread-safe reactors will be created.
+    // 2. By heap allocating it we can obtain a reference to a stable address
+    // that's not dependent on the stack frame of the function that called `new`
+    fn new() -> Arc<Mutex<Box<Self>>> {
         let (tx, rx) = channel::<Event>();
-        let readylist = Arc::new(Mutex::new(vec![]));
-        let rl_clone = readylist.clone();
+        let reactor = Arc::new(Mutex::new(Box::new(Reactor {
+            dispatcher: tx,
+            handle: None,
+            tasks: HashMap::new(),
+        })));
+        
+        // Notice that we'll need to use `weak` reference here. If we don't,
+        // our `Reactor` will not get `dropped` when our main thread is finished
+        // since we're holding internal references to it.
 
-        // This `Vec` will hold handles to all the threads we spawn so we can
-        // join them later on and finish our programm in a good manner
-        let mut handles = vec![];
+        // Since we're collecting all `JoinHandles` from the threads we spawn
+        // and make sure to join them we know that `Reactor` will be alive
+        // longer than any reference held by the threads we spawn here.
+        let reactor_clone = Arc::downgrade(&reactor);
 
-        // This will be the "Reactor thread"
+        // This will be our Reactor-thread. The Reactor-thread will in our case
+        // just spawn new threads which will serve as timers for us.
         let handle = thread::spawn(move || {
+            let mut handles = vec![];
+
+            // This simulates some I/O resource
             for event in rx {
-                let rl_clone = rl_clone.clone();
+                println!("REACTOR: {:?}", event);
+                let reactor = reactor_clone.clone();
                 match event {
-
-                    // If we get a close event we break out of the loop we're in
                     Event::Close => break,
-                    Event::Timeout(waker, duration, id) => {
+                    Event::Timeout(duration, id) => {
 
-                        // When we get an event we simply spawn a new thread
-                        // which will simulate some I/O resource...
+                        // We spawn a new thread that will serve as a timer
+                        // and will call `wake` on the correct `Waker` once
+                        // it's done.
                         let event_handle = thread::spawn(move || {
-
-                            //... by sleeping for the number of seconds
-                            // we provided when creating the `Task`.
                             thread::sleep(Duration::from_secs(duration));
-
-                            // When it's done sleeping we put the ID of this task
-                            // on the "readylist"
-                            rl_clone.lock().map(|mut rl| rl.push(id)).unwrap();
-
-                            // Then we call `wake` which will wake up our
-                            // executor and start polling the futures
-                            waker.wake();
+                            let reactor = reactor.upgrade().unwrap();
+                            reactor.lock().map(|mut r| r.wake(id)).unwrap();
                         });
-
                         handles.push(event_handle);
                     }
                 }
             }
 
-            // When we exit the Reactor we first join all the handles on
-            // the child threads we've spawned so we catch any panics and
-            // release any resources.
-            for handle in handles {
-                handle.join().unwrap();
-            }
+            // This is important for us since we need to know that these
+            // threads don't live longer than our Reactor-thread. Our
+            // Reactor-thread will be joined when `Reactor` gets dropped.
+            handles.into_iter().for_each(|handle| handle.join().unwrap());
         });
+        reactor.lock().map(|mut r| r.handle = Some(handle)).unwrap();
+        reactor
+    }
 
-        Reactor {
-            readylist,
-            dispatcher: tx,
-            handle: Some(handle),
+    // The wake function will call wake on the waker for the task with the
+    // corresponding id.
+    fn wake(&mut self, id: usize) {
+        self.tasks.get_mut(&id).map(|state| {
+
+            // No matter what state the task was in we can safely set it
+            // to ready at this point. This lets us get ownership over the
+            // the data that was there before we replaced it.
+            match mem::replace(state, TaskState::Ready) {
+                TaskState::NotReady(waker) => waker.wake(),
+                TaskState::Finished => panic!("Called 'wake' twice on task: {}", id),
+                _ => unreachable!()
+            }
+        }).unwrap();
+    }
+
+    // Register a new task with the reactor. In this particular example
+    // we panic if a task with the same id get's registered twice 
+    fn register(&mut self, duration: u64, waker: Waker, id: usize) {
+        if self.tasks.insert(id, TaskState::NotReady(waker)).is_some() {
+            panic!("Tried to insert a task with id: '{}', twice!", id);
         }
+        self.dispatcher.send(Event::Timeout(duration, id)).unwrap();
     }
 
-    fn register(&mut self, duration: u64, waker: Waker, data: usize) {
-
-        // registering an event is as simple as sending an `Event` through
-        // the channel.
-        self.dispatcher
-            .send(Event::Timeout(waker, duration, data))
-            .unwrap();
-    }
-
+    // We send a close event to the reactor so it closes down our reactor-thread
     fn close(&mut self) {
         self.dispatcher.send(Event::Close).unwrap();
     }
 
-    // We need a way to check if any event's are ready. This will simply
-    // look through the "readylist" for an event macthing the ID we want to
-    // check for.
-    fn is_ready(&self, id_to_check: usize) -> bool {
-        self.readylist
-            .lock()
-            .map(|rl| rl.iter().any(|id| *id == id_to_check))
-            .unwrap()
+    // We simply checks if a task with this id is in the state `TaskState::Ready`
+    fn is_ready(&self, id: usize) -> bool {
+        self.tasks.get(&id).map(|state| match state {
+            TaskState::Ready => true,
+            _ => false,
+        }).unwrap_or(false)
     }
 }
 
-// When our `Reactor` is dropped we join the reactor thread with the thread
-// owning our `Reactor` so we catch any panics and release all resources.
-// It's not needed for this to work, but it really is a best practice to join
-// all threads you spawn.
 impl Drop for Reactor {
     fn drop(&mut self) {
         self.handle.take().map(|h| h.join().unwrap()).unwrap();
     }
 }
+
 ```
 
-It's a lot of code though, but essentially we just spawn off a new thread
-and make it sleep for some time which we specify when we create a `Task`.
+虽然代码量很大，但实际上我们只是产生了一个新线程，并让它休眠一段时间，这是我们在创建任务时指定的。
 
-Now, let's test our code and see if it works. Since we're sleeping for a couple
-of seconds here, just give it some time to run.
 
-In the last chapter we have the [whole 200 lines in an editable window](./8_finished_example.md)
-which you can edit and change the way you like.
+虽然代码量很大，但实际上我们只是产生了一个新线程，并让它休眠一段时间，这是我们在创建任务时指定的。
 
-```rust, edition2018
-# use std::{
-#     future::Future, pin::Pin, sync::{mpsc::{channel, Sender}, Arc, Mutex},
-#     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
-#     thread::{self, JoinHandle}, time::{Duration, Instant}
-# };
-# 
+在最后一章中，我们在一个可编辑的窗口中有整整200行，你可以按照自己喜欢的方式进行编辑和修改。
+
+```rust
 fn main() {
     // This is just to make it easier for us to see when our Future was resolved
     let start = Instant::now();
@@ -483,231 +453,134 @@ fn main() {
     reactor.lock().map(|mut r| r.close()).unwrap();
 }
 
-# // ============================= EXECUTOR ====================================
-# fn block_on<F: Future>(mut future: F) -> F::Output {
-#     let mywaker = Arc::new(MyWaker{ thread: thread::current() }); 
-#     let waker = waker_into_waker(Arc::into_raw(mywaker));
-#     let mut cx = Context::from_waker(&waker);
-#     let val = loop {
-#         let pinned = unsafe { Pin::new_unchecked(&mut future) };
-#         match Future::poll(pinned, &mut cx) {
-#             Poll::Ready(val) => break val,
-#             Poll::Pending => thread::park(),
-#         };
-#     };
-#     val
-# }
-# 
-# // ====================== FUTURE IMPLEMENTATION ==============================
-# #[derive(Clone)]
-# struct MyWaker {
-#     thread: thread::Thread,
-# }
-# 
-# #[derive(Clone)]
-# pub struct Task {
-#     id: usize,
-#     reactor: Arc<Mutex<Reactor>>,
-#     data: u64,
-#     is_registered: bool,
-# }
-# 
-# fn mywaker_wake(s: &MyWaker) {
-#     let waker_ptr: *const MyWaker = s;
-#     let waker_arc = unsafe {Arc::from_raw(waker_ptr)};
-#     waker_arc.thread.unpark();
-# }
-# 
-# fn mywaker_clone(s: &MyWaker) -> RawWaker {
-#     let arc = unsafe { Arc::from_raw(s).clone() };
-#     std::mem::forget(arc.clone()); // increase ref count
-#     RawWaker::new(Arc::into_raw(arc) as *const (), &VTABLE)
-# }
-# 
-# const VTABLE: RawWakerVTable = unsafe {
-#     RawWakerVTable::new(
-#         |s| mywaker_clone(&*(s as *const MyWaker)),     // clone
-#         |s| mywaker_wake(&*(s as *const MyWaker)),      // wake
-#         |s| mywaker_wake(*(s as *const &MyWaker)),      // wake by ref
-#         |s| drop(Arc::from_raw(s as *const MyWaker)),   // decrease refcount
-#     )
-# };
-# 
-# fn waker_into_waker(s: *const MyWaker) -> Waker {
-#     let raw_waker = RawWaker::new(s as *const (), &VTABLE);
-#     unsafe { Waker::from_raw(raw_waker) }
-# }
-# 
-# impl Task {
-#     fn new(reactor: Arc<Mutex<Reactor>>, data: u64, id: usize) -> Self {
-#         Task {
-#             id,
-#             reactor,
-#             data,
-#             is_registered: false,
-#         }
-#     }
-# }
-# 
-# impl Future for Task {
-#     type Output = usize;
-#     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-#         let mut r = self.reactor.lock().unwrap();
-#         if r.is_ready(self.id) {
-#             Poll::Ready(self.id)
-#         } else if self.is_registered {
-#             Poll::Pending
-#         } else {
-#             r.register(self.data, cx.waker().clone(), self.id);
-#             drop(r);
-#             self.is_registered = true;
-#             Poll::Pending
-#         }
-#     }
-# }
-# 
-# // =============================== REACTOR ===================================
-# struct Reactor {
-#     dispatcher: Sender<Event>,
-#     handle: Option<JoinHandle<()>>,
-#     readylist: Arc<Mutex<Vec<usize>>>,
-# }
-# #[derive(Debug)]
-# enum Event {
-#     Close,
-#     Timeout(Waker, u64, usize),
-# }
-# 
-# impl Reactor {
-#     fn new() -> Self {
-#         let (tx, rx) = channel::<Event>();
-#         let readylist = Arc::new(Mutex::new(vec![]));
-#         let rl_clone = readylist.clone();
-#         let mut handles = vec![];
-#         let handle = thread::spawn(move || {
-#             // This simulates some I/O resource
-#             for event in rx {
-#                 println!("REACTOR: {:?}", event);
-#                 let rl_clone = rl_clone.clone();
-#                 match event {
-#                     Event::Close => break,
-#                     Event::Timeout(waker, duration, id) => {
-#                         let event_handle = thread::spawn(move || {
-#                             thread::sleep(Duration::from_secs(duration));
-#                             rl_clone.lock().map(|mut rl| rl.push(id)).unwrap();
-#                             waker.wake();
-#                         });
-# 
-#                         handles.push(event_handle);
-#                     }
-#                 }
-#             }
-# 
-#             for handle in handles {
-#                 handle.join().unwrap();
-#             }
-#         });
-# 
-#         Reactor {
-#             readylist,
-#             dispatcher: tx,
-#             handle: Some(handle),
-#         }
-#     }
-# 
-#     fn register(&mut self, duration: u64, waker: Waker, data: usize) {
-#         self.dispatcher
-#             .send(Event::Timeout(waker, duration, data))
-#             .unwrap();
-#     }
-# 
-#     fn close(&mut self) {
-#         self.dispatcher.send(Event::Close).unwrap();
-#     }
-# 
-#     fn is_ready(&self, id_to_check: usize) -> bool {
-#         self.readylist
-#             .lock()
-#             .map(|rl| rl.iter().any(|id| *id == id_to_check))
-#             .unwrap()
-#     }
-# }
-# 
-# impl Drop for Reactor {
-#     fn drop(&mut self) {
-#         self.handle.take().map(|h| h.join().unwrap()).unwrap();
-#     }
-# }
 ```
 
-I added a debug printout of the events the reactor registered interest for so we can observe
-two things:
+我添加了一个reactor感兴趣的事件的调试输出，这样我们可以观察到两件事:
 
-1. How the `Waker` object looks just like the _trait object_ we talked about in an earlier chapter
-2. In what order the events register interest with the reactor
+1. `Waker`这个对象如何像前面我们讨论的trai对象
+2. 事件以何种顺序向reactor注册感兴趣的信息
 
-The last point is relevant when we move on the the last paragraph.
 
-## Async/Await and concurrecy
+### Async/Await和并发Async/Await
 
-The `async` keyword can be used on functions as in `async fn(...)` or on a
-block as in `async { ... }`. Both will turn your function, or block, into a
-`Future`.
+Async 关键字可以用在 async fn (...)中的函数上，也可以用在 async { ... }中的块上。 两者都可以讲一个函数或者代码块转换成一个`Future`
 
-These `Futures` are rather simple. Imagine our generator from a few chapters
-back. Every `await` point is like a `yield` point.
+这些`Future`是相当简单的。 想象一下几章前我们的生成器。 
 
-Instead of `yielding` a value we pass in, we yield the result of calling `poll` on
-the next `Future` we're awaiting.
+每一个await就像一个yield,只不过不是生成一个值,而是生成Future,然后当轮询的时候返回响应的结果.
 
-Our `mainfut` contains two non-leaf futures which it will call `poll` on. **Non-leaf-futures**
-has a `poll` method that simply polls their inner futures and these state machines
-are polled until some "leaf future" in the end either returns `Ready` or `Pending`.
+我们的`mainfut`包含两个`non-leaf-future`，它将在轮询中调用。`non-leaf-future`有一个`poll`方法, 这个方法简单的轮询他自己的内部Future,它内部的Future会被继续轮询,直到`leaf-future`返回`Ready`或者`Pending`.
 
-The way our example is right now, it's not much better than regular synchronous
-code. For us to actually await multiple futures at the same time we somehow need
-to `spawn` them so the executor starts running them concurrently.
+就我们现在的例子来看，它并不比常规的同步代码好多少。 对于我们来说，如果需要在同一时间等待多个`Future`，我们需要`spawn`它们，以便执行器同时运行它们。
 
-Our example as it stands now returns this:
-
-```ignore
+现在我们的例子返回如下结果:
+```rust
 Future got 1 at time: 1.00.
 Future got 2 at time: 3.00.
 ```
 
-If these `Futures` were executed asynchronously we would expect to see:
-
-```ignore
+```rust
 Future got 1 at time: 1.00.
 Future got 2 at time: 2.00.
 ```
 
-> Note that this doesn't mean they need to run in parallel. They _can_ run in
-parallel but there is no requirement. Remember that we're waiting for some
-external resource so we can fire off many such calls on a single thread and
-handle each event as it resolves.
+> 请注意，这并不意味着它们需要并行运行。 它们可以并行运行，但没有要求。 请记住，我们正在等待一些外部资源，这样我们就可以在一个线程上发出许多这样的调用，并在事件发生时处理每个事件
 
-Now, this is the point where I'll refer you to some better resources for
-implementing a better executor. You should have a pretty good understanding of
-the concept of Futures by now helping you along the way.
+现在，我将向您介绍一些更好的资源，以实现一个更好的执行器。 现在你应该已经对`Future`的概念有了一个很好的理解。
 
-The next step should be getting to know how more advanced runtimes work and
-how they implement different ways of running Futures to completion.
+下一步应该是了解更高级的运行时是如何工作的，以及它们如何实现不同的运行 Futures 的方式。
 
-[If I were you I would read this next, and try to implement it for our example.](./conclusion.md#building-a-better-exectuor).
 
-That's actually it for now. There as probably much more to learn, this is enough
-for today. 
 
-I hope exploring Futures and async in general gets easier after this read and I
-do really hope that you do continue to explore further.
+如果我是你，我接下来就会读这篇文章，并试着把它应用到我们的例子中去。
 
-Don't forget the exercises in the last chapter 😊.
+ 
 
-[mio]: https://github.com/tokio-rs/mio
-[arc_wake]: https://rust-lang-nursery.github.io/futures-api-docs/0.3.0-alpha.13/futures/task/trait.ArcWake.html
-[example_repo]: https://github.com/cfsamson/examples-futures
-[playground_example]:https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=ca43dba55c6e3838c5494de45875677f
-[spurious_wakeup]: https://cfsamson.github.io/book-exploring-async-basics/9_3_http_module.html#bonus-section
-[condvar]: https://doc.rust-lang.org/stable/std/sync/struct.Condvar.html
-[crossbeam_parker]: https://docs.rs/crossbeam/0.7.3/crossbeam/sync/struct.Parker.html
+我希望在阅读完这篇文章后，能够更容易地探索Future和异步，我真的希望你们能够继续深入探索。
+
+别忘了最后一章的练习。
+
+### 奖励部分-暂停线程的更好办法
+
+正如我们在本章前面解释的那样，仅仅调用`thread::sleep` 并不足以实现一个合适的反应器。 你也可以使用类似[crossbeam::sync::Parker](https://docs.rs/crossbeam/0.7.3/crossbeam/sync/struct.Parker.html)中的Parker 这样的工具.
+
+因为我们自己创建一个这样的Parker也不需要很多行代码，所以我们将展示如何通过使用 Condvar 和 Mutex 来解决这个问题。
+
+我们自己的Parker:
+
+```rust
+#[derive(Default)]
+struct Parker(Mutex<bool>, Condvar);
+
+impl Parker {
+    fn park(&self) {
+
+        // We aquire a lock to the Mutex which protects our flag indicating if we
+        // should resume execution or not.
+        let mut resumable = self.0.lock().unwrap();
+
+            // We put this in a loop since there is a chance we'll get woken, but
+            // our flag hasn't changed. If that happens, we simply go back to sleep.
+            while !*resumable {
+
+                // We sleep until someone notifies us
+                resumable = self.1.wait(resumable).unwrap();
+            }
+
+        // We immidiately set the condition to false, so that next time we call `park` we'll
+        // go right to sleep.
+        *resumable = false;
+    }
+
+    fn unpark(&self) {
+        // We simply acquire a lock to our flag and sets the condition to `runnable` when we
+        // get it.
+        *self.0.lock().unwrap() = true;
+
+        // We notify our `Condvar` so it wakes up and resumes.
+        self.1.notify_one();
+    }
+}
+
+```
+
+在 Rust 中的 Condvar 被设计为与互斥对象一起工作。 通常，您会认为在我们进入休眠之前,`self.0.lock().unwrap()`不会释放锁, 这意味着我们的`unpark`永远获取不到锁,我们会陷入死锁。
+
+使用`Condvar`我们可以避免这种情况，因为`Condvar`会消耗我们的锁，所以它会在我们睡觉的时候释放。
+当我们再次恢复时，我们的`Condvar`会重新持有锁，这样我们就可以继续操作它。
+这意味着我们需要对我们的执行器做一些非常细微的改变，比如:
+
+```rust
+fn block_on<F: Future>(mut future: F) -> F::Output {
+    let parker = Arc::new(Parker::default()); // <--- NB!
+    let mywaker = Arc::new(MyWaker { parker: parker.clone() }); <--- NB!
+    let waker = mywaker_into_waker(Arc::into_raw(mywaker));
+    let mut cx = Context::from_waker(&waker);
+    
+    // SAFETY: we shadow `future` so it can't be accessed again.
+    let mut future = unsafe { Pin::new_unchecked(&mut future) }; 
+    loop {
+        match Future::poll(future.as_mut(), &mut cx) {
+            Poll::Ready(val) => break val,
+            Poll::Pending => parker.park(), // <--- NB!
+        };
+    }
+}
+
+```
+我们需要像这样改变我们的唤醒器:
+
+```rust
+#[derive(Clone)]
+struct MyWaker {
+    parker: Arc<Parker>,
+}
+
+fn mywaker_wake(s: &MyWaker) {
+    let waker_arc = unsafe { Arc::from_raw(s) };
+    waker_arc.parker.unpark();
+}
+
+```
+> 你可以查看由park/unpark引起的[微妙问题的连接](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=b2343661fe3d271c91c6977ab8e681d0). 你可以在[这里](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=bebef0f8a8ce6a9d0d32442cc8381595)查看我们最终的版本如何避免了这个问题.
+

@@ -1,5 +1,6 @@
 ##   引言
 本书[github地址](https://github.com/nkbai/books-futures-explained) 欢迎star,以及提出任何问题
+
 [原书地址](https://cfsamson.github.io/books-futures-explained/) 
 
 这本书的目的是用一个例子驱动的方法来解释Rust中的Futures，探索为什么他们被设计成这样，以及他们如何工作。 我们还将介绍在编程中处理并发性时的一些替代方案。

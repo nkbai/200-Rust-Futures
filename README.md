@@ -14,7 +14,7 @@
 
 建议先阅读本书，然后继续阅读Stjepan的文章（https://stjepang.github.io/)，以了解有关运行时及其运行方式的更多信息，尤其是：
 
-1. [构建自己的block_on（)](https://stevenbai.top/rust/build_your_own_block_on/) [原文地址](https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
+1. [构建自己的block_on](https://stevenbai.top/rust/build_your_own_block_on/) [原文地址](https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
 2. [构建自己的执行程序](https://stevenbai.top/rust/build_your_own_executor/)  [原文地址](https://stjepang.github.io/2020/01/31/build-your-own-executor.html)
 
 

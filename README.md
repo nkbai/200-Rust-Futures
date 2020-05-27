@@ -1,50 +1,34 @@
-![build status](https://travis-ci.com/cfsamson/books-futures-explained.svg?branch=master)
+ 
+# 200行代码讲透RUST FUTURES
+本书发布地址: [https://stevenbai.top/books-futures-explained/book/](https://stevenbai.top/books-futures-explained/book/)
+ 
+本书旨在通过示例驱动的方法来解释Rust中的“ Futures”，探讨为什么要以自己的方式设计它们，以及它们如何工作。我们还将介绍处理编程并发时的一些替代方法。
 
-# Futures Explained in 200 Lines of Rust
+在Rust中使用Future或async / await不需要进入本书中的详细程度。它是为那些想知道如何工作的好奇者而设计的。
 
-The rendered version is found at: [https://cfsamson.github.io/books-futures-explained/](https://cfsamson.github.io/books-futures-explained/)
+## 本书涵盖的内容
 
-This book aims to explain `Futures` in Rust using an example driven approach,
-exploring why they're designed the way they are, and how they work. We'll also
-take a look at some of the alternatives we have when dealing with concurrency
-in programming.
+本书将尝试解释您可能想知道的所有内容，包括不同类型的执行器和运行时。我们将在本书中实现一个非常简单的运行时，介绍一些概念，但这足以入门。
 
-Going into the level of detail I do in this book is not needed to use futures
-or async/await in Rust. It's for the curious out there that want to know _how_
-it all works.
+[Stjepan Glavina](https://github.com/stjepang)撰写了一系列有关异步运行时和执行器的出色文章，传闻他将会有更大的动作(Stjepan大神实现的异步运行时[smol](https://github.com/stjepang/smol)已经上线了)。
 
-## What this book covers
+建议先阅读本书，然后继续阅读Stjepan的文章（https://stjepang.github.io/)，以了解有关运行时及其运行方式的更多信息，尤其是：
 
-This book will try to explain everything you might wonder about up until the
-topic of different types of executors and runtimes. We'll just implement a very
-simple runtime in this book introducing some concepts but it's enough to get
-started.
+1. [构建自己的block_on（)](https://stevenbai.top/rust/build_your_own_block_on/) [原文地址](https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
+2. [构建自己的执行程序](https://stevenbai.top/rust/build_your_own_executor/)  [原文地址](https://stjepang.github.io/2020/01/31/build-your-own-executor.html)
 
-[Stjepan Glavina](https://github.com/stjepang) has made an excellent series of
-articles about async runtimes and executors, and if the rumors are right there
-is more to come from him in the near future.
 
-The way you should go about it is to read this book first, then continue
-reading the [articles from stejpang](https://stjepang.github.io/) to learn more
-about runtimes and how they work, especially:
+## 贡献
 
-1. [Build your own block_on()](https://stjepang.github.io/2020/01/25/build-your-own-block-on.html)
-2. [Build your own executor](https://stjepang.github.io/2020/01/31/build-your-own-executor.html)
+欢迎各种贡献。包括但不限于拼写,措辞,语法,语义等.
 
-## Contributing
+非常欢迎您对内容进行更改,如果您能通过PR做出贡献，我将不胜感激。
 
-All kinds of contributions are welcome. Spelling, wording or clarifications are
-very welcome as well as adding or suggesting changes to the content. I'd appreciate
-if you contribute through a PR.
-
-Feedback, questions or discussion is welcome in the issue tracker.
-
-## Changelog
-
-**2020-04-06:** Final draft finished
+欢迎在Issues中提供反馈，问题或讨论。
+ 
 
 ## License
 
 This book is MIT licensed.
 
-[rendered]: https://cfsamson.github.io/books-futures-explained/
+ 
